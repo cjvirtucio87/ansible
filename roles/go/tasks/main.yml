@@ -1,0 +1,5 @@
+---
+- name: Setup Go
+  import_tasks: go.yml
+- name: Setup Go ENV Script
+  import_tasks: go_env.yml 

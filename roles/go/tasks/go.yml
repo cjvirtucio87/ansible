@@ -1,0 +1,36 @@
+---
+- name: Check if Golang is installed
+  stat:
+    path: /usr/local/go
+  register: golang
+- name: Skipping Golang install
+  debug:
+    msg: "Golang is already installed. Skipping this tasklist."
+  when: golang.stat.exists
+- name: Install Golang
+  block: 
+    - name: Make local source directory
+      file:
+        path: /usr/local/src
+        state: directory
+    - name: Download Golang archive
+      get_url:
+        url: "https://dl.google.com/go/go{{ go_ver }}.linux-amd64.tar.gz"
+        dest: "/usr/local/src/go{{ go_ver }}.linux-amd64.tar.gz"
+        checksum: "{{ go_checksum }}"
+    - name: Make Golang directory
+      file:
+        path: /usr/local/go
+        state: directory
+    - name: Install Golang source
+      unarchive:
+        src: "/usr/local/src/go{{ go_ver }}.linux-amd64.tar.gz"
+        dest: /usr/local
+        copy: no
+      ignore_errors: "{{ ansible_check_mode }}"
+    - name: Remove Golang archive
+      file:
+        path: "/usr/local/src/go{{ go_ver }}.linux-amd64.tar.gz"
+        state: absent
+  when: not golang.stat.exists
+  become: yes

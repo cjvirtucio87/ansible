@@ -1,0 +1,33 @@
+---
+- name: Check if OpenJDK is installed (OSX)
+  stat: 
+    path: "/Library/Java/Home"
+  register: openjdk
+- name: Skipping OpenJDK (OSX)
+  debug:
+    msg: "OpenJDK is already installed. Skipping this tasklist."
+  when: openjdk.stat.exists
+- name: Install OpenJDK (OSX)
+  block:
+    - name: Download OpenJDK (OSX)
+      get_url:
+        url: "https://download.java.net/java/GA/jdk10/10.0.1/fb4372174a714e6b8c52526dc134031e/10/openjdk-{{ jdk_ver }}_osx-x64_bin.tar.gz"
+        dest: "/usr/local/src/openjdk-{{ jdk_ver }}_osx-x64_bin.tar.gz"
+        checksum: "{{ jdk_checksum }}"
+    - name: Unarchive OpenJDK (OSX)
+      unarchive:
+        src: "/usr/local/src/openjdk-{{ jdk_ver }}_osx-x64_bin.tar.gz"
+        dest: "/usr/local/src/"
+        copy: no
+    - name: Install OpenJDK (OSX)
+      command: "cp -r /usr/local/src/jdk-{{ jdk_ver }}.jdk/Contents/. /Library/Java/"
+    - name: Cleanup OpenJDK archive (OSX)
+      file:
+        path: "/usr/local/src/jdk-{{ jdk_ver }}.jdk"
+        state: absent
+    - name: Cleanup OpenJDK tarball (OSX)
+      file:
+        path: "/usr/local/src/openjdk-{{ jdk_ver }}_osx-64_bin.tar.gz"
+        state: absent
+  when: not openjdk.stat.exists
+  become: yes

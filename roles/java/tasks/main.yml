@@ -1,0 +1,31 @@
+---
+- name: Install JDK (OSX)
+  import_tasks: osx_jdk.yml
+  when: ansible_distribution == "MacOSX"
+- name: Install JDK (Unix)
+  import_tasks: unix_jdk.yml
+  when: ansible_distribution != "MacOSX"
+- name: Download Maven
+  get_url:
+    url: "http://mirrors.advancedhosters.com/apache/maven/maven-3/{{ mvn_ver }}/binaries/apache-maven-{{ mvn_ver }}-bin.tar.gz"
+    dest: "/usr/local/src/apache-maven-{{ mvn_ver }}-bin.tar.gz"
+    checksum: "{{ mvn_checksum }}"
+  become: yes
+- name: Make Maven directory
+  file:
+    path: "/usr/local/apache-maven-{{ mvn_ver }}"
+    state: directory
+  become: yes
+- name: Install Maven
+  unarchive:
+    src: "/usr/local/src/apache-maven-{{ mvn_ver }}-bin.tar.gz"
+    dest: "/usr/local/apache-maven-{{ mvn_ver }}"
+    copy: no
+  become: yes
+  ignore_errors: "{{ ansible_check_mode }}"
+- name: Set MVN_HOME
+  shell: "echo MVN_HOME is set to $MVN_HOME"
+  environment:
+    MVN_HOME: "apache-maven-{{ mvn_ver }}" 
+    PATH: "$PATH:$MVN_HOME/bin"
+  become: yes 
