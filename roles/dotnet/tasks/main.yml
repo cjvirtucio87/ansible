@@ -2,3 +2,6 @@
 - name: Install .NET Core 2.0 (OSX)
   import_tasks: osx_dotnet.yml
   when: ansible_distribution == "MacOSX"
+- name: Install Mono (OSX)
+  import_tasks: osx_mono.yml
+  when: ansible_distribution == "MacOSX"

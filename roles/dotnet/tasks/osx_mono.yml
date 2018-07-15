@@ -1,0 +1,16 @@
+---
+- name: Check if Mono is installed
+  stat:
+    path: /Library/Frameworks/Mono.framework/Versions/Current/Commands/mono
+  register: mono
+- name: Skipping Mono install
+  debug:
+    msg: "Mono is already installed. Skipping this tasklist."
+  when: mono.stat.exists
+- name: Install Mono
+  block: 
+    - name: Brew Cask Install Mono
+      homebrew_cask:
+        name: mono-mdk
+        state: present
+  when: not mono.stat.exists
