@@ -1,0 +1,6 @@
+---
+- name: osx_localhost.yml | OSX on Your Machine
+  hosts: osx_localhost
+  roles:
+    - go
+    - java
