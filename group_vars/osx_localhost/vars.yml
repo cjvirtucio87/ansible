@@ -1,5 +1,4 @@
 ---
-ansible_sudo_user: "{{ vault_osx_localhost_user }}" 
 ansible_sudo_pass: "{{ vault_osx_localhost_pass }}"
 jdk_ver: '10.0.1'
 jdk_checksum: sha256:650e06c203a9d2752d686dc62206580afdc909af924b7ea8573b1c671e182ab0 

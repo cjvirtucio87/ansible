@@ -27,7 +27,6 @@
         src: "/usr/local/src/go{{ go_ver }}.linux-amd64.tar.gz"
         dest: /usr/local
         copy: no
-      ignore_errors: "{{ ansible_check_mode }}"
     - name: Remove Golang archive
       file:
         path: "/usr/local/src/go{{ go_ver }}.linux-amd64.tar.gz"

@@ -2,9 +2,11 @@
 - name: Install JDK (OSX)
   import_tasks: osx_jdk.yml
   when: ansible_distribution == "MacOSX"
+  ignore_errors: "{{ ansible_check_mode }}"
 - name: Install JDK (Unix)
   import_tasks: unix_jdk.yml
   when: ansible_distribution != "MacOSX"
+  ignore_errors: "{{ ansible_check_mode }}"
 - name: Download Maven
   get_url:
     url: "http://mirrors.advancedhosters.com/apache/maven/maven-3/{{ mvn_ver }}/binaries/apache-maven-{{ mvn_ver }}-bin.tar.gz"

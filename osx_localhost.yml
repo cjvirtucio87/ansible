@@ -4,3 +4,4 @@
   roles:
     - go
     - java
+    - dotnet
