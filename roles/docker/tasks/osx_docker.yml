@@ -1,0 +1,16 @@
+---
+- name: Check if Docker is installed
+  stat:
+    path: /Applications/Docker.app/
+  register: docker
+- name: Skipping Docker install
+  debug:
+    msg: "Docker is already installed. Skipping this tasklist."
+  when: docker.stat.exists
+- name: Install Docker
+  block: 
+    - name: Brew Cask Install Docker
+      homebrew_cask:
+        name: docker
+        state: present
+  when: not docker.stat.exists
