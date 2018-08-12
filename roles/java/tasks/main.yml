@@ -9,7 +9,7 @@
   ignore_errors: "{{ ansible_check_mode }}"
 - name: Download Maven
   get_url:
-    url: "http://mirrors.advancedhosters.com/apache/maven/maven-3/{{ mvn_ver }}/binaries/apache-maven-{{ mvn_ver }}-bin.tar.gz"
+    url: "http://www.apache.org/dist/maven/maven-3/{{ mvn_ver }}/binaries/apache-maven-{{ mvn_ver }}-bin.tar.gz"
     dest: "/usr/local/src/apache-maven-{{ mvn_ver }}-bin.tar.gz"
     checksum: "{{ mvn_checksum }}"
   become: yes
