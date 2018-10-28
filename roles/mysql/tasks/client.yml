@@ -7,23 +7,21 @@
   get_url:
     url: "https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-{{ mysqlsh_ver }}-macos10.14-x86-64bit.tar.gz"
     dest: "/usr/local/src/mysql-shell-{{ mysqlsh_ver }}-macos10.14-x86-64bit.tar.gz" 
-- name: Install MySQL Shell
-  block:
-  - name: Make temporary untarred directory
-    file:
-      path: "/usr/local/mysqlsh-untarred"
-      state: directory
-  - name: Unarchive the tarball
-    unarchive:
-      src: "/usr/local/src/mysql-shell-{{ mysqlsh_ver }}-macos10.14-x86-64bit.tar.gz"
-      dest: "/usr/local/mysqlsh-untarred" 
-      copy: no
-  - name: Move directory
-    command: "mv /usr/local/mysqlsh-untarred/mysql-shell-{{ mysqlsh_ver }}-macos10.14-x86-64bit /usr/local/mysqlsh-{{ mysqlsh_ver }}"
-  - name: Remove untarred folder
-    file:
-      path: "/usr/local/mysqlsh-untarred"
-      state: absent
+- name: Make temporary untarred directory
+  file:
+    path: "/usr/local/mysqlsh-untarred"
+    state: directory
+- name: Unarchive the tarball
+  unarchive:
+    src: "/usr/local/src/mysql-shell-{{ mysqlsh_ver }}-macos10.14-x86-64bit.tar.gz"
+    dest: "/usr/local/mysqlsh-untarred" 
+    copy: no
+- name: Move directory
+  command: "mv /usr/local/mysqlsh-untarred/mysql-shell-{{ mysqlsh_ver }}-macos10.14-x86-64bit /usr/local/mysqlsh-{{ mysqlsh_ver }}"
+- name: Remove untarred folder
+  file:
+    path: "/usr/local/mysqlsh-untarred"
+    state: absent
 - name: Remove MySQL Shell archive
   file:
     path: "/usr/local/src/mysql-shell-{{ mysqlsh_ver }}-macos10.14-x86-64bit.tar.gz" 
