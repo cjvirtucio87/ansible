@@ -7,4 +7,5 @@
     - dotnet
     - docker
     - editor
+    - hugo 
     - mysql

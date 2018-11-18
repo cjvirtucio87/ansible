@@ -1,0 +1,4 @@
+---
+- name: Install Hugo (OSX)
+  import_tasks: osx_hugo.yml
+  when: ansible_distribution == "MacOSX"

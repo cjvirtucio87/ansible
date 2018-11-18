@@ -1,0 +1,16 @@
+---
+- name: Check if Hugo is installed
+  stat:
+    path: /usr/local/bin/hugo
+  register: hugo
+- name: Skipping Hugo install
+  debug:
+    msg: "Hugo is already installed. Skipping this tasklist."
+  when: hugo.stat.exists
+- name: Install Hugo
+  block: 
+    - name: Brew Cask Install Hugo
+      package:
+        name: hugo 
+        state: present
+  when: not hugo.stat.exists
