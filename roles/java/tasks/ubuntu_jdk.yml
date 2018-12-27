@@ -1,0 +1,29 @@
+---
+- name: Check if OpenJDK is installed (Ubuntu)
+  stat: 
+    path: "/usr/local/openjdk-{{ jdk_ver }}"
+  register: openjdk
+- name: Skipping OpenJDK (Ubuntu)
+  debug:
+    msg: "OpenJDK is already installed. Skipping this tasklist."
+  when: openjdk.stat.exists
+- name: Install OpenJDK (Ubuntu)
+  block:
+    - name: Download OpenJDK (Ubuntu)
+      get_url:
+        url: "https://download.java.net/java/GA/jdk11/13/GPL/openjdk-{{ jdk_ver }}_linux-x64_bin.tar.gz"
+        dest: "/usr/local/src/openjdk-{{ jdk_ver }}_linux-x64_bin.tar.gz"
+        checksum: "{{ jdk_checksum }}"
+    - name: Unarchive OpenJDK (Ubuntu)
+      unarchive:
+        src: "/usr/local/src/openjdk-{{ jdk_ver }}_linux-x64_bin.tar.gz"
+        dest: "/usr/local/src"
+        copy: no
+    - name: Install OpenJDK (Ubuntu)
+      command: "mv /usr/local/src/jdk-{{ jdk_ver }} /usr/local/openjdk-{{ jdk_ver }}"
+    - name: Cleanup OpenJDK archive (Ubuntu)
+      file:
+        path: "/usr/local/src"
+        state: absent
+  when: not openjdk.stat.exists
+  become: yes
