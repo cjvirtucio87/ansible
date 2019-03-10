@@ -1,4 +1,9 @@
 ---
-- name: Setup Go
-  import_tasks: go.yml
+- name: Install Go (OSX)
+  import_tasks: osx_go.yml
+  when: ansible_distribution == "MacOSX"
+  ignore_errors: "{{ ansible_check_mode }}"
+- name: Install Go (Unix)
+  import_tasks: unix_go.yml
+  when: ansible_distribution != "MacOSX"
   ignore_errors: "{{ ansible_check_mode }}"
