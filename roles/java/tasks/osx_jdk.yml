@@ -9,30 +9,30 @@
   when: openjdk.stat.exists
 - name: Install OpenJDK (OSX)
   block:
-    - name: Create staging directory (OSX)
-      tempfile:
-        state: directory
-        suffix: '_openjdk'
-      register: openjdk_staging_dir
-    - name: Download OpenJDK (OSX)
-      get_url:
-        url: "{{ jdk_url }}"
-        dest: "{{ openjdk_staging_dir.path }}/openjdk-{{ jdk_ver }}.tar.gz"
-        checksum: "{{ jdk_checksum }}"
-    - name: Create content folder (OSX)
-      file:
-        path: "{{ openjdk_staging_dir.path }}/content"
-        state: directory
-    - name: Unarchive OpenJDK (OSX)
-      unarchive:
-        src: "{{ openjdk_staging_dir.path }}/openjdk-{{ jdk_ver }}.tar.gz"
-        dest: "{{ openjdk_staging_dir.path }}/content"
-        copy: no
-    - name: Install OpenJDK (OSX)
-      command: "cp -r {{ openjdk_staging_dir.path }}/content/jdk-{{ jdk_ver }}.jdk/Contents/. /Library/Java/"
-    - name: Clean up staging directory (OSX)
-      file:
-        path: "{{ openjdk_staging_dir.path }}"
-        state: absent
+  - name: Create staging directory (OSX)
+    tempfile:
+      state: directory
+      suffix: '_openjdk'
+    register: openjdk_staging_dir
+  - name: Download OpenJDK (OSX)
+    get_url:
+      url: "{{ jdk_url }}"
+      dest: "{{ openjdk_staging_dir.path }}/openjdk-{{ jdk_ver }}.tar.gz"
+      checksum: "{{ jdk_checksum }}"
+  - name: Create content folder (OSX)
+    file:
+      path: "{{ openjdk_staging_dir.path }}/content"
+      state: directory
+  - name: Unarchive OpenJDK (OSX)
+    unarchive:
+      src: "{{ openjdk_staging_dir.path }}/openjdk-{{ jdk_ver }}.tar.gz"
+      dest: "{{ openjdk_staging_dir.path }}/content"
+      copy: no
+  - name: Install OpenJDK (OSX)
+    command: "cp -r {{ openjdk_staging_dir.path }}/content/jdk-{{ jdk_ver }}.jdk/Contents/. /Library/Java/"
+  - name: Clean up staging directory (OSX)
+    file:
+      path: "{{ openjdk_staging_dir.path }}"
+      state: absent
   when: not openjdk.stat.exists
   become: yes

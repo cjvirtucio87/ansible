@@ -2,4 +2,4 @@
 - name: ubuntu_localhost | Ubuntu on your machine
   hosts: ubuntu_localhost
   roles:
-    - java
+  - java

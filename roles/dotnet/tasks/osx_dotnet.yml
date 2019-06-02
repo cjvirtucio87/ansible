@@ -9,8 +9,8 @@
   when: dotnet.stat.exists
 - name: Install .NET Core
   block: 
-    - name: Brew Cask Install .NET Core
-      homebrew_cask:
-        name: dotnet-sdk
-        state: present
+  - name: Brew Cask Install .NET Core
+    homebrew_cask:
+      name: dotnet-sdk
+      state: present
   when: not dotnet.stat.exists

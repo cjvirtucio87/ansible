@@ -9,8 +9,8 @@
   when: mono.stat.exists
 - name: Install Mono
   block: 
-    - name: Brew Cask Install Mono
-      homebrew_cask:
-        name: mono-mdk
-        state: present
+  - name: Brew Cask Install Mono
+    homebrew_cask:
+      name: mono-mdk
+      state: present
   when: not mono.stat.exists

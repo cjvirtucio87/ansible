@@ -9,8 +9,8 @@
   when: hugo.stat.exists
 - name: Install Hugo
   block: 
-    - name: Brew Cask Install Hugo
-      package:
-        name: hugo 
-        state: present
+  - name: Brew Cask Install Hugo
+    package:
+      name: hugo 
+      state: present
   when: not hugo.stat.exists

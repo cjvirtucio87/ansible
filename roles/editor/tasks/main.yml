@@ -9,8 +9,8 @@
   when: vscode.stat.exists
 - name: Install Visual Studio Code
   block:
-    - name: Brew Cask Install Visual Studio Code 
-      homebrew_cask:
-        name: visual-studio-code
-        state: present
+  - name: Brew Cask Install Visual Studio Code 
+    homebrew_cask:
+      name: visual-studio-code
+      state: present
   when: not vscode.stat.exists
