@@ -38,6 +38,7 @@
       copy: no
     become: yes
     ignore_errors: "{{ ansible_check_mode }}"
+  always:
   - name: Cleanup staging directory
     file:
       path: "{{ mvn_staging_dir.path }}"
