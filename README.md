@@ -1,7 +1,7 @@
 # cjvirtucio87's Ansible Playbooks
 
-Playbooks for spinning up infrastructure for your machine. Currently supports `osx`.
+Playbooks for spinning up infrastructure for your machine. Currently supports `osx` and `ubuntu`.
 
 ### Usage
 
-`ansible-playbook -i dev --ask-vault-pass osx_localhost.yml`
+`sudo ansible-playbook -i dev.ini <platform>_localhost.yml`
