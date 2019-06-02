@@ -11,12 +11,12 @@
   block:
     - name: Download OpenJDK (Ubuntu)
       get_url:
-        url: "https://download.java.net/java/GA/jdk11/13/GPL/openjdk-{{ jdk_ver }}_linux-x64_bin.tar.gz"
-        dest: "/usr/local/src/openjdk-{{ jdk_ver }}_linux-x64_bin.tar.gz"
+        url: "{{ jdk_url }}"
+        dest: "/usr/local/src/openjdk-{{ jdk_ver }}.tar.gz"
         checksum: "{{ jdk_checksum }}"
     - name: Unarchive OpenJDK (Ubuntu)
       unarchive:
-        src: "/usr/local/src/openjdk-{{ jdk_ver }}_linux-x64_bin.tar.gz"
+        src: "/usr/local/src/openjdk-{{ jdk_ver }}.tar.gz"
         dest: "/usr/local/src"
         copy: no
     - name: Install OpenJDK (Ubuntu)

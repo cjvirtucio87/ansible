@@ -1,6 +1,5 @@
 ---
-- hosts: all
-  vars:
-    jdk_ver: '11.0.1'
+- name: ubuntu_localhost | Ubuntu on your machine
+  hosts: ubuntu_localhost
   roles:
     - java
