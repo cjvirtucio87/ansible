@@ -13,26 +13,33 @@
   - ansible_distribution != "MacOSX"
   - ansible_distribution != "Ubuntu"
   ignore_errors: "{{ ansible_check_mode }}"
-- name: Download Maven
-  get_url:
-    url: "http://www.apache.org/dist/maven/maven-3/{{ mvn_ver }}/binaries/apache-maven-{{ mvn_ver }}-bin.tar.gz"
-    dest: "/usr/local/src/apache-maven-{{ mvn_ver }}-bin.tar.gz"
-    checksum: "{{ mvn_checksum }}"
-  become: yes
-- name: Make Maven directory
-  file:
-    path: "/usr/local/apache-maven-{{ mvn_ver }}"
-    state: directory
-  become: yes
-- name: Install Maven
-  unarchive:
-    src: "/usr/local/src/apache-maven-{{ mvn_ver }}-bin.tar.gz"
-    dest: "/usr/local/"
-    copy: no
-  become: yes
-  ignore_errors: "{{ ansible_check_mode }}"
-- name: Cleanup Maven Tarball
-  file:
-    path: "/usr/local/src/apache-maven-{{ mvn_ver }}-bin.tar.gz"
-    state: absent
-  become: yes
+- name: Install Maven 
+  block:
+  - name: Create staging directory
+    tempfile:
+      state: directory
+      suffix: '_mvn'
+    register: mvn_staging_dir
+  - name: Download Maven
+    get_url:
+      url: "{{ mvn_url }}"
+      dest: "{{ mvn_staging_dir.path }}/apache-maven-{{ mvn_ver }}-bin.tar.gz"
+      checksum: "{{ mvn_checksum }}"
+    become: yes
+  - name: Make Maven directory
+    file:
+      path: "/usr/local/apache-maven-{{ mvn_ver }}"
+      state: directory
+    become: yes
+  - name: Install Maven
+    unarchive:
+      src: "{{ mvn_staging_dir.path }}/apache-maven-{{ mvn_ver }}-bin.tar.gz"
+      dest: "/usr/local/"
+      copy: no
+    become: yes
+    ignore_errors: "{{ ansible_check_mode }}"
+  - name: Cleanup staging directory
+    file:
+      path: "{{ mvn_staging_dir.path }}"
+      state: absent
+    become: yes

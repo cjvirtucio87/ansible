@@ -9,21 +9,30 @@
   when: openjdk.stat.exists
 - name: Install OpenJDK (Ubuntu)
   block:
+    - name: Create staging directory (Ubuntu)
+      tempfile:
+        state: directory
+        suffix: '_openjdk'
+      register: openjdk_staging_dir
     - name: Download OpenJDK (Ubuntu)
       get_url:
         url: "{{ jdk_url }}"
-        dest: "/usr/local/src/openjdk-{{ jdk_ver }}.tar.gz"
+        dest: "{{ openjdk_staging_dir.path }}/openjdk-{{ jdk_ver }}.tar.gz"
         checksum: "{{ jdk_checksum }}"
+    - name: Create content folder (Ubuntu)
+      file:
+        path: "{{ openjdk_staging_dir.path }}/content"
+        state: directory 
     - name: Unarchive OpenJDK (Ubuntu)
       unarchive:
-        src: "/usr/local/src/openjdk-{{ jdk_ver }}.tar.gz"
-        dest: "/usr/local/src"
+        src: "{{ openjdk_staging_dir.path }}/openjdk-{{ jdk_ver }}.tar.gz"
+        dest: "{{ openjdk_staging_dir.path }}/content"
         copy: no
     - name: Install OpenJDK (Ubuntu)
-      command: "mv /usr/local/src/jdk-{{ jdk_ver }} /usr/local/openjdk-{{ jdk_ver }}"
-    - name: Cleanup OpenJDK archive (Ubuntu)
+      command: "mv {{ openjdk_staging_dir.path }}/content/jdk-{{ jdk_ver }} /usr/local/openjdk-{{ jdk_ver }}"
+    - name: Clean up staging directory (Ubuntu)
       file:
-        path: "/usr/local/src"
+        path: "{{ openjdk_staging_dir.path }}"
         state: absent
   when: not openjdk.stat.exists
   become: yes
