@@ -1,0 +1,20 @@
+---
+- name: Install Microsoft key and feed (Ubuntu)
+  block:
+  - name: Create staging directory (Ubuntu)
+    tempfile:
+      state: directory
+      suffix: '_dotnet'
+    register: dotnet_staging_dir
+  - name: Download key (Ubuntu)
+    uri:
+      url: "{{ dotnet_key_url }}"
+      dest: "{{ dotnet_staging_dir.path }}/dotnet_key.deb"
+  - name: Install key (Ubuntu)
+    apt:
+      deb: "{{ dotnet_staging_dir.path }}/dotnet_key.deb"
+    become: yes
+  - name: Clean up staging directory (Ubuntu)
+    file:
+      path: "{{ dotnet_staging_dir.path }}"
+      state: absent

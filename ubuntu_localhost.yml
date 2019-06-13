@@ -3,3 +3,4 @@
   hosts: ubuntu_localhost
   roles:
   - java
+  - dotnet 
