@@ -1,5 +1,8 @@
 ---
+dotnet_apt_repo: 'universe'
 dotnet_key_url: 'https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb'
+dotnet_ubuntu_archive_url: 'http://archive.ubuntu.com/ubuntu'
+dotnet_ver: '2.2'
 jdk_url: 'https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz'
 jdk_ver: '11.0.2'
 jdk_checksum: 'sha256:99be79935354f5c0df1ad293620ea36d13f48ec3ea870c838f20c504c9668b57'
