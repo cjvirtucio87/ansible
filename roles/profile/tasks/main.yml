@@ -1,0 +1,5 @@
+---
+- name: Create infra-init.sh profile script
+  template:
+    src: infra-init.sh.j2
+    dest: "{{ profile.init.path }}"

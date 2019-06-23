@@ -9,6 +9,9 @@ jdk_checksum: 'sha256:99be79935354f5c0df1ad293620ea36d13f48ec3ea870c838f20c504c9
 mvn_url: 'http://mirror.reverse.net/pub/apache/maven/maven-3/3.6.1/binaries/apache-maven-3.6.1-bin.tar.gz'
 mvn_ver: '3.6.1'
 mvn_checksum: 'sha512:b4880fb7a3d81edd190a029440cdf17f308621af68475a4fe976296e71ff4a4b546dd6d8a58aaafba334d309cc11e638c52808a4b0e818fc0fd544226d952544'
+profile:
+  init:
+    path: '/etc/profile.d/cjvirtucio87-infra-init.sh'
 go_ver: '1.10'
 go_checksum: 'sha256:511a4799e8d64cda3352bb7fe72e359689ea6ef0455329cda6b6e1f3137326c1'
 mysqlsh_ver: '8.0.13'
