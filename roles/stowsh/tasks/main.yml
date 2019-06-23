@@ -1,0 +1,5 @@
+---
+- name: Install stowsh (Ubuntu)
+  import_tasks: ubuntu_stowsh.yml
+  when: ansible_distribution == "Ubuntu"
+  ignore_errors: "{{ ansible_check_mode }}"

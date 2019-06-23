@@ -13,6 +13,14 @@
   - ansible_distribution != "MacOSX"
   - ansible_distribution != "Ubuntu"
   ignore_errors: "{{ ansible_check_mode }}"
+- name: Check if Maven is installed (Ubuntu)
+  stat: 
+    path: "/usr/local/apache-maven-{{ mvn_ver }}"
+  register: mvn
+- name: Skipping Maven (Ubuntu)
+  debug:
+    msg: "Maven is already installed. Skipping this tasklist."
+  when: mvn.stat.exists
 - name: Install Maven 
   block:
   - name: Create staging directory
@@ -44,3 +52,4 @@
       path: "{{ mvn_staging_dir.path }}"
       state: absent
     become: yes
+  when: not mvn.stat.exists
