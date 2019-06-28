@@ -1,4 +1,12 @@
 ---
+- name: Check if Dotnet is installed (Ubuntu)
+  stat: 
+    path: "/usr/bin/dotnet"
+  register: dotnet
+- name: Skipping Dotnet (Ubuntu)
+  debug:
+    msg: "Dotnet is already installed. Skipping this tasklist."
+  when: dotnet.stat.exists
 - name: Install Dotnet (Ubuntu)
   block:
   - name: Create staging directory (Ubuntu)
@@ -32,3 +40,5 @@
     file:
       path: "{{ dotnet_staging_dir.path }}"
       state: absent
+  when: not dotnet.stat.exists
+
