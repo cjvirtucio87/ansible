@@ -16,11 +16,11 @@
 - name: Check if Maven is installed (Ubuntu)
   stat: 
     path: "/usr/local/apache-maven-{{ mvn_ver }}"
-  register: mvn
+  register: mvn_check
 - name: Skipping Maven (Ubuntu)
   debug:
     msg: "Maven is already installed. Skipping this tasklist."
-  when: mvn.stat.exists
+  when: mvn_check.stat.exists
 - name: Install Maven 
   block:
   - name: Create staging directory
@@ -52,4 +52,4 @@
       path: "{{ mvn_staging_dir.path }}"
       state: absent
     become: yes
-  when: not mvn.stat.exists
+  when: not mvn_check.stat.exists

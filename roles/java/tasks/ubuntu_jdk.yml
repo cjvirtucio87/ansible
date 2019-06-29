@@ -2,11 +2,11 @@
 - name: Check if OpenJDK is installed (Ubuntu)
   stat: 
     path: "/usr/local/openjdk-{{ jdk_ver }}"
-  register: openjdk
+  register: openjdk_check
 - name: Skipping OpenJDK (Ubuntu)
   debug:
     msg: "OpenJDK is already installed. Skipping this tasklist."
-  when: openjdk.stat.exists
+  when: openjdk_check.stat.exists
 - name: Install OpenJDK (Ubuntu)
   block:
   - name: Create staging directory (Ubuntu)
@@ -35,5 +35,5 @@
     file:
       path: "{{ openjdk_staging_dir.path }}"
       state: absent
-  when: not openjdk.stat.exists
+  when: not openjdk_check.stat.exists
   become: yes

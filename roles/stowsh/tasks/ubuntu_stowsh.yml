@@ -2,11 +2,11 @@
 - name: Check if stowsh is installed (Ubuntu)
   stat: 
     path: "/usr/local/stowsh-{{ stowsh_ver }}"
-  register: stowsh
+  register: stowsh_check
 - name: Skipping stowsh (Ubuntu)
   debug:
     msg: "stowsh is already installed. Skipping this tasklist."
-  when: stowsh.stat.exists
+  when: stowsh_check.stat.exists
 - name: Install stowsh (Ubuntu)
   block:
   - name: Create staging directory (Ubuntu)
@@ -34,5 +34,5 @@
     file:
       path: "{{ stowsh_staging_dir.path }}"
       state: absent
-  when: not stowsh.stat.exists
+  when: not stowsh_check.stat.exists
   become: yes

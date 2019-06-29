@@ -1,8 +1,8 @@
 # java
-export JAVA_HOME="{{ openjdk.stat.path }}";
-export MVN_HOME="{{ mvn.stat.path }}";
+export JAVA_HOME="{{ openjdk_check.stat.path }}";
+export MVN_HOME="{{ mvn_check.stat.path }}";
 
 # path
-export PATH="{{ stowsh.stat.path }}/bin:${PATH}";
+export PATH="{{ stowsh_check.stat.path }}/bin:${PATH}";
 export PATH="${JAVA_HOME}/bin:${PATH}";
 export PATH="${MVN_HOME}/bin:${PATH}";
