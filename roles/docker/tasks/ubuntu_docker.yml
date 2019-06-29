@@ -1,4 +1,12 @@
 ---
+- name: Check if Docker is installed (Ubuntu)
+  stat: 
+    path: "/usr/bin/docker"
+  register: docker_check
+- name: Skipping Docker (Ubuntu)
+  debug:
+    msg: "Docker is already installed. Skipping this tasklist."
+  when: docker_check.stat.exists
 - name: Install Docker (Ubuntu)
   block:
   - name: Create staging directory (Ubuntu)
@@ -27,4 +35,5 @@
     file:
       path: "{{ docker_staging_dir.path }}"
       state: absent
+  when: not docker_check.stat.exists
   become: yes
