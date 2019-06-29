@@ -1,0 +1,30 @@
+---
+- name: Install Docker (Ubuntu)
+  block:
+  - name: Create staging directory (Ubuntu)
+    tempfile:
+      state: directory
+      suffix: '_docker'
+    register: docker_staging_dir
+  - name: Download Docker GPG Key (Ubuntu)
+    get_url:
+      url: "{{ docker.gpg.url }}"
+      dest: "{{ docker_staging_dir.path }}/gpg"
+  - name: Add Docker GPGP Key (Ubuntu)
+    apt_key:
+      file: "{{ docker_staging_dir.path }}/gpg"
+  - name: Add Docker Repo (Ubuntu)
+    apt_repository:
+      repo: "{{ docker.repo.archive_type }} {{ docker.repo.url }} {{ ansible_distribution_release }} {{ docker.repo.components | join(' ') }}"
+  - name: Update Package List (Ubuntu)
+    apt:
+      update_cache: yes
+  - name: Install Docker (Ubuntu)
+    apt:
+      name: "{{ docker.pkg.name }}"
+  always:
+  - name: Clean up staging directory (Ubuntu)
+    file:
+      path: "{{ docker_staging_dir.path }}"
+      state: absent
+  become: yes
