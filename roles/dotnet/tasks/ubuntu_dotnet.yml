@@ -17,10 +17,10 @@
   - name: Download key (Ubuntu)
     uri:
       url: "{{ dotnet.apt.key.url }}"
-      dest: "{{ dotnet_staging_dir.path }}/dotnet_key.deb"
+      dest: "{{ dotnet_staging_dir.path }}/dotnet.key.deb"
   - name: Install key (Ubuntu)
     apt:
-      deb: "{{ dotnet_staging_dir.path }}/dotnet_key.deb"
+      deb: "{{ dotnet_staging_dir.path }}/dotnet.key.deb"
     become: yes
   - name: Add repository
     apt_repository:
@@ -41,4 +41,3 @@
       path: "{{ dotnet_staging_dir.path }}"
       state: absent
   when: not dotnet_check.stat.exists
-

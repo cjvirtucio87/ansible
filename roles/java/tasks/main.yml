@@ -15,7 +15,7 @@
   ignore_errors: "{{ ansible_check_mode }}"
 - name: Check if Maven is installed (Ubuntu)
   stat: 
-    path: "/usr/local/apache-maven-{{ mvn_ver }}"
+    path: "/usr/local/apache-maven-{{ mvn.ver }}"
   register: mvn_check
 - name: Skipping Maven (Ubuntu)
   debug:
@@ -30,18 +30,18 @@
     register: mvn_staging_dir
   - name: Download Maven
     get_url:
-      url: "{{ mvn_url }}"
-      dest: "{{ mvn_staging_dir.path }}/apache-maven-{{ mvn_ver }}-bin.tar.gz"
-      checksum: "{{ mvn_checksum }}"
+      url: "{{ mvn.url }}"
+      dest: "{{ mvn_staging_dir.path }}/apache-maven-{{ mvn.ver }}-bin.tar.gz"
+      checksum: "{{ mvn.checksum }}"
     become: yes
   - name: Make Maven directory
     file:
-      path: "/usr/local/apache-maven-{{ mvn_ver }}"
+      path: "/usr/local/apache-maven-{{ mvn.ver }}"
       state: directory
     become: yes
   - name: Install Maven
     unarchive:
-      src: "{{ mvn_staging_dir.path }}/apache-maven-{{ mvn_ver }}-bin.tar.gz"
+      src: "{{ mvn_staging_dir.path }}/apache-maven-{{ mvn.ver }}-bin.tar.gz"
       dest: "/usr/local/"
       copy: no
     become: yes
