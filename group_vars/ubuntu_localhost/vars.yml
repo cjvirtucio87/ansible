@@ -2,6 +2,8 @@
 docker:
   gpg:
     url: 'https://download.docker.com/linux/ubuntu/gpg'
+  group:
+    name: 'docker'
   host: 'tcp://localhost:2375'
   pkg:
     name: 'docker-ce'

@@ -37,3 +37,18 @@
       state: absent
   when: not docker_check.stat.exists
   become: yes
+- name: Docker Post-Install (Ubuntu)
+  block:
+  - name: Add Docker Group (Ubuntu)
+    group:
+      name: "{{ docker.group.name }}"
+      state: present
+  - name: Checking managed_user (Ubuntu)
+    fail:
+      msg: 'managed_user variable was not set. You can set this by running the playbook with the --extra-vars option.'
+    when: managed_user is not defined
+  - name: Adding managed_user to Docker Group (Ubuntu)
+    user:
+      groups: "{{ docker.group.name }}"
+      append: yes
+      name: "{{ managed_user }}"
