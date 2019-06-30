@@ -8,26 +8,26 @@ docker:
   pkg:
     name: 'docker-ce'
   repo:
+    archive_type: 'deb'
     components:
     - 'stable'
-    archive_type: 'deb'
     url: 'https://download.docker.com/linux/ubuntu'
 dotnet:
   apt:
     archive:
       url: 'http://archive.ubuntu.com/ubuntu'
-    repo: 'universe'
     key:
       url: 'https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb'
+    repo: 'universe'
   ver: '2.2'
 jdk:
+  checksum: 'sha256:99be79935354f5c0df1ad293620ea36d13f48ec3ea870c838f20c504c9668b57'
   url: 'https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz'
   ver: '11.0.2'
-  checksum: 'sha256:99be79935354f5c0df1ad293620ea36d13f48ec3ea870c838f20c504c9668b57'
 mvn:
+  checksum: 'sha512:b4880fb7a3d81edd190a029440cdf17f308621af68475a4fe976296e71ff4a4b546dd6d8a58aaafba334d309cc11e638c52808a4b0e818fc0fd544226d952544'
   url: 'http://mirror.reverse.net/pub/apache/maven/maven-3/3.6.1/binaries/apache-maven-3.6.1-bin.tar.gz'
   ver: '3.6.1'
-  checksum: 'sha512:b4880fb7a3d81edd190a029440cdf17f308621af68475a4fe976296e71ff4a4b546dd6d8a58aaafba334d309cc11e638c52808a4b0e818fc0fd544226d952544'
 profile:
   init:
     path: '/etc/profile.d/cjvirtucio87-infra-init.sh'
