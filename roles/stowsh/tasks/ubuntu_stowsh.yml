@@ -1,7 +1,7 @@
 ---
 - name: Check if stowsh is installed (Ubuntu)
   stat: 
-    path: "/usr/local/stowsh-{{ stowsh_ver }}"
+    path: "/usr/local/stowsh-{{ stowsh.ver }}"
   register: stowsh_check
 - name: Skipping stowsh (Ubuntu)
   debug:
@@ -16,19 +16,19 @@
     register: stowsh_staging_dir
   - name: Download stowsh (Ubuntu)
     get_url:
-      url: "{{ stowsh_url }}"
-      dest: "{{ stowsh_staging_dir.path }}/stowsh-{{ stowsh_ver }}.tar.gz"
+      url: "{{ stowsh.url }}"
+      dest: "{{ stowsh_staging_dir.path }}/stowsh-{{ stowsh.ver }}.tar.gz"
   - name: Create content folder (Ubuntu)
     file:
       path: "{{ stowsh_staging_dir.path }}/content"
       state: directory 
   - name: Unarchive stowsh (Ubuntu)
     unarchive:
-      src: "{{ stowsh_staging_dir.path }}/stowsh-{{ stowsh_ver }}.tar.gz"
+      src: "{{ stowsh_staging_dir.path }}/stowsh-{{ stowsh.ver }}.tar.gz"
       dest: "{{ stowsh_staging_dir.path }}/content"
       copy: no
   - name: Install stowsh (Ubuntu)
-    command: "mv {{ stowsh_staging_dir.path }}/content /usr/local/stowsh-{{ stowsh_ver }}"
+    command: "mv {{ stowsh_staging_dir.path }}/content /usr/local/stowsh-{{ stowsh.ver }}"
   always:
   - name: Clean up staging directory (Ubuntu)
     file:
