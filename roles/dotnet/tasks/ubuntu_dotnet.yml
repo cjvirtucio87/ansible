@@ -16,7 +16,7 @@
     register: dotnet_staging_dir
   - name: Download key (Ubuntu)
     uri:
-      url: "{{ dotnet_key_url }}"
+      url: "{{ dotnet.apt.key.url }}"
       dest: "{{ dotnet_staging_dir.path }}/dotnet_key.deb"
   - name: Install key (Ubuntu)
     apt:
@@ -24,7 +24,7 @@
     become: yes
   - name: Add repository
     apt_repository:
-      repo: "deb {{ dotnet_ubuntu_archive_url }} {{ ansible_distribution_release }} {{ dotnet_apt_repo }}"
+      repo: "deb {{ dotnet.apt.archive.url }} {{ ansible_distribution_release }} {{ dotnet.apt.repo }}"
       state: present
   - name: Install apt-transport-https
     apt:
@@ -34,7 +34,7 @@
       update_cache: yes
   - name: Install Dotnet SDK
     apt:
-      name: "dotnet-sdk-{{ dotnet_ver }}"
+      name: "dotnet-sdk-{{ dotnet.ver }}"
   always:
   - name: Clean up staging directory (Ubuntu)
     file:
