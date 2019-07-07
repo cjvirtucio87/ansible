@@ -28,7 +28,7 @@
       dest: "{{ stowsh_staging_dir.path }}/content"
       copy: no
   - name: Install stowsh (Ubuntu)
-    command: "mv {{ stowsh_staging_dir.path }}/content /usr/local/stowsh-{{ stowsh.ver }}"
+    command: "mv {{ stowsh_staging_dir.path }}/content {{ stowsh_dir }}"
   always:
   - name: Clean up staging directory (Ubuntu)
     file:
