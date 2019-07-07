@@ -1,0 +1,21 @@
+---
+- name: Check if kubectl is installed (Ubuntu)
+  stat: 
+    path: "{{ k8s.kubectl.install.dir }}/kubectl"
+  register: kubectl_check
+- name: Skipping kubectl (Ubuntu)
+  debug:
+    msg: "kubectl is already installed. Skipping this tasklist."
+  when: kubectl_check.stat.exists
+- name: Install kubectl (Ubuntu)
+  block:
+  - name: Download kubectl (Ubuntu)
+    get_url:
+      url: "{{ k8s.kubectl.url }}"
+      dest: "{{ k8s.kubectl.install.dir }}/kubectl"
+  - name: Set kubectl permissions (Ubuntu)
+    file:
+      path: "{{ k8s.kubectl.install.dir }}/kubectl"
+      mode: 0755
+  when: not kubectl_check.stat.exists
+  become: yes
