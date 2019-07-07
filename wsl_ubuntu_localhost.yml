@@ -1,0 +1,11 @@
+---
+- name: wsl_ubuntu_localhost | Ubuntu on WSL 
+  hosts: wsl_ubuntu_localhost
+  roles:
+  - stowsh
+  - java
+  - dotnet 
+  - docker 
+  - k8s
+  - wsl
+  - profile

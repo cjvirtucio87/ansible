@@ -1,0 +1,15 @@
+- name: WSL-specific k8s Post-Install (Ubuntu)
+  block:
+  - name: Checking managed_user (Ubuntu)
+    fail:
+      msg: 'managed_user variable was not set. You can set this by running the playbook with the --extra-vars option.'
+    when: managed_user is not defined
+  - name: Ensuring that .kube folder exists (Ubuntu)
+    file:
+      path: "{{ wsl.home.dir }}/{{ managed_user }}/.kube"
+      state: directory
+  - name: Create symlink to mounted .kube/config 
+    file:
+      path: "{{ wsl.home.dir }}/{{ managed_user }}/.kube/config"
+      src: "{{ wsl.mnt.dir }}/c/Users/{{ managed_user }}/.kube/config"
+      state: link 
