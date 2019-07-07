@@ -31,6 +31,7 @@ mvn:
 k8s:
   kubectl:
     url: 'https://storage.googleapis.com/kubernetes-release/release/v1.15.0/bin/linux/amd64/kubectl'
+    ver: '1.15.0'
 profile:
   init:
     path: '/etc/profile.d/cjvirtucio87-infra-init.sh'

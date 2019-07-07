@@ -3,6 +3,7 @@ export JAVA_HOME="{{ jdk_home }}";
 export MVN_HOME="{{ mvn_home }}";
 
 # path
+export PATH="{{ kubectl_bin }}:${PATH}";
 export PATH="{{ stowsh_bin }}:${PATH}";
 export PATH="${JAVA_HOME}/bin:${PATH}";
 export PATH="${MVN_HOME}/bin:${PATH}";
