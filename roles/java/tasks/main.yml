@@ -15,7 +15,7 @@
   ignore_errors: "{{ ansible_check_mode }}"
 - name: Check if Maven is installed (Ubuntu)
   stat: 
-    path: "/usr/local/apache-maven-{{ mvn.ver }}"
+    path: "{{ mvn_dir }}" 
   register: mvn_check
 - name: Skipping Maven (Ubuntu)
   debug:

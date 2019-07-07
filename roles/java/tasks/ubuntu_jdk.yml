@@ -1,7 +1,7 @@
 ---
 - name: Check if OpenJDK is installed (Ubuntu)
   stat: 
-    path: "/usr/local/openjdk-{{ jdk.ver }}"
+    path: "{{ jdk_dir }}" 
   register: openjdk_check
 - name: Skipping OpenJDK (Ubuntu)
   debug:

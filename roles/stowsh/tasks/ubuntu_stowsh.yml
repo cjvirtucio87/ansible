@@ -1,7 +1,7 @@
 ---
 - name: Check if stowsh is installed (Ubuntu)
   stat: 
-    path: "/usr/local/stowsh-{{ stowsh.ver }}"
+    path: "{{ stowsh_dir }}"
   register: stowsh_check
 - name: Skipping stowsh (Ubuntu)
   debug:

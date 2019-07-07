@@ -3,3 +3,7 @@
   template:
     src: infra-init.sh.j2
     dest: "{{ profile.init.path }}"
+  vars:
+    jdk_home: "{{ jdk_dir }}"
+    mvn_home: "{{ mvn_dir }}"
+    stowsh_bin: "{{ stowsh_dir }}/bin"
