@@ -5,7 +5,7 @@ docker:
   group:
     name: 'docker'
   host: 'tcp://localhost:2375'
-  pkg:
+  apt:
     name: 'docker-ce'
   repo:
     archive_type: 'deb'

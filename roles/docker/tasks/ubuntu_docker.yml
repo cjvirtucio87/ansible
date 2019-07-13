@@ -29,7 +29,7 @@
       update_cache: yes
   - name: Install Docker (Ubuntu)
     apt:
-      name: "{{ docker.pkg.name }}"
+      name: "{{ docker.apt.name }}"
   always:
   - name: Clean up staging directory (Ubuntu)
     file:
