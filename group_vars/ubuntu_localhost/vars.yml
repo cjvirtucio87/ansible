@@ -28,6 +28,15 @@ mvn:
   checksum: 'sha512:b4880fb7a3d81edd190a029440cdf17f308621af68475a4fe976296e71ff4a4b546dd6d8a58aaafba334d309cc11e638c52808a4b0e818fc0fd544226d952544'
   url: 'http://mirror.reverse.net/pub/apache/maven/maven-3/3.6.1/binaries/apache-maven-3.6.1-bin.tar.gz'
   ver: '3.6.1'
+r:
+  gpg:
+    keyserver: 'keyserver.ubuntu.com'
+    recv_key: 'E298A3A825C0D65DFD57CBB651716619E084DAB9'
+  repo:
+    archive_type: 'deb'
+    components:
+    - 'bionic-cran35/'
+    url: 'https://cloud.r-project.org/bin/linux/ubuntu'
 k8s:
   kubectl:
     url: 'https://storage.googleapis.com/kubernetes-release/release/v1.15.0/bin/linux/amd64/kubectl'

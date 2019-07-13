@@ -1,0 +1,25 @@
+---
+- name: Check if R is installed (Ubuntu)
+  stat: 
+    path: "/usr/bin/R" 
+  register: r_check
+- name: Skipping R (Ubuntu)
+  debug:
+    msg: "R is already installed. Skipping this tasklist."
+  when: r_check.stat.exists
+- name: Install R (Ubuntu)
+  block:
+  - name: Add GPG key (Ubuntu)
+    apt_key:
+      keyserver: "{{ r.gpg.keyserver }}"
+      id: "{{ r.gpg.recv_key }}"
+  - name: Add R Repo (Ubuntu)
+    apt_repository:
+      repo: "{{ r.repo.archive_type }} {{ r.repo.url }} {{ r.repo.components | join(' ') }}"
+  - name: Install R (Ubuntu)
+    apt:
+      name: 'r-base-core'
+      state: present
+      autoclean: yes
+  when: not r_check.stat.exists
+  become: yes
