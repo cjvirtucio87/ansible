@@ -37,6 +37,10 @@ r:
     components:
     - 'bionic-cran35/'
     url: 'https://cloud.r-project.org/bin/linux/ubuntu'
+  apt:
+    name: 'r-base-core'
+    debian_revision: 1
+  ver: 3.6.1
 k8s:
   kubectl:
     url: 'https://storage.googleapis.com/kubernetes-release/release/v1.15.0/bin/linux/amd64/kubectl'

@@ -18,8 +18,13 @@
       repo: "{{ r.repo.archive_type }} {{ r.repo.url }} {{ r.repo.components | join(' ') }}"
   - name: Install R (Ubuntu)
     apt:
-      name: 'r-base-core'
+      name: "{{ r.apt.name }}={{ r.ver }}-{{ r.apt.debian_revision }}{{ ansible_distribution_release }}"
       state: present
       autoclean: yes
-  when: not r_check.stat.exists
+  - name: Create R_LIBS_USER directory (Ubuntu)
+    file:
+      owner: "{{ managed_user }}"
+      path: "{{ r_libs_user }}"
+      state: directory
+  when: r_check.stat.exists
   become: yes
