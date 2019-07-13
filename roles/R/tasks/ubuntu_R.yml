@@ -26,5 +26,5 @@
       owner: "{{ managed_user }}"
       path: "{{ r_libs_user }}"
       state: directory
-  when: r_check.stat.exists
+  when: not r_check.stat.exists
   become: yes
