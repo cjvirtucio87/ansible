@@ -3,7 +3,11 @@
   import_tasks: osx_go.yml
   when: ansible_distribution == "MacOSX"
   ignore_errors: "{{ ansible_check_mode }}"
+- name: Install Go (Ubuntu)
+  import_tasks: ubuntu_go.yml
+  when: ansible_distribution == "Ubuntu"
+  ignore_errors: "{{ ansible_check_mode }}"
 - name: Install Go (Unix)
   import_tasks: unix_go.yml
-  when: ansible_distribution != "MacOSX"
+  when: ansible_distribution != "MacOSX" and ansible_distribution != "Ubuntu"
   ignore_errors: "{{ ansible_check_mode }}"

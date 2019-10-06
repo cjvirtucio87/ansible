@@ -48,8 +48,9 @@ k8s:
 profile:
   init:
     path: '/etc/profile.d/cjvirtucio87-infra-init.sh'
-go_ver: '1.10'
-go_checksum: 'sha256:511a4799e8d64cda3352bb7fe72e359689ea6ef0455329cda6b6e1f3137326c1'
+go:
+  checksum: 'sha256:94f874037b82ea5353f4061e543681a0e79657f787437974214629af8407d124'
+  ver: '1.13.1'
 mysqlsh_ver: '8.0.13'
 stowsh:
   url: 'https://github.com/cjvirtucio87/stowsh/releases/download/0.1.0/cjvirtucio87-stowsh-0.1.0.tar.gz'

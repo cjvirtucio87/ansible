@@ -4,6 +4,7 @@
     src: infra-init.sh.j2
     dest: "{{ profile.init.path }}"
   vars:
+    go_path: "{{ go_dir }}"
     jdk_home: "{{ jdk_dir }}"
     kubectl_bin: "{{ kubectl_dir }}/bin"
     mvn_home: "{{ mvn_dir }}"

@@ -1,0 +1,36 @@
+---
+- name: Check if Golang is installed
+  stat:
+    path: "{{ go_dir }}/bin/go" 
+  register: golang
+- name: Skipping Golang install
+  debug:
+    msg: "Golang is already installed. Skipping this tasklist."
+  when: golang.stat.exists
+- name: Install Golang
+  block:
+  - name: Create staging directory (Ubuntu)
+    tempfile:
+      state: directory
+      suffix: '_go'
+    register: go_staging_dir
+  - name: Download Golang archive
+    get_url:
+      url: "https://dl.google.com/go/go{{ go_ver }}.linux-amd64.tar.gz"
+      dest: "{{ go_staging_dir.path }}/go{{ go_ver }}.linux-amd64.tar.gz"
+      checksum: "{{ go_checksum }}"
+  - name: Make Golang directory
+    file:
+      path: "{{ go_dir }}" 
+      state: directory
+  - name: Install Golang source
+    unarchive:
+      src: "{{ go_staging_dir.path }}/go{{ go_ver }}.linux-amd64.tar.gz"
+      dest: "{{ go_dir }}" 
+      copy: no
+  - name: Remove Golang archive
+    file:
+      path: "{{ go_staging_dir.path }}"
+      state: absent
+  when: not golang.stat.exists
+  become: yes

@@ -1,3 +1,6 @@
+# go
+export GO_PATH="{{ go_path }}/go"
+
 # java
 export JAVA_HOME="{{ jdk_home }}";
 export MVN_HOME="{{ mvn_home }}";
@@ -6,6 +9,7 @@ export MVN_HOME="{{ mvn_home }}";
 export R_LIBS_USER="{{ r_libs_user }}";
 
 # path
+export PATH="{{ go_path }}/go/bin:${PATH}";
 export PATH="{{ kubectl_bin }}:${PATH}";
 export PATH="{{ stowsh_bin }}:${PATH}";
 export PATH="${JAVA_HOME}/bin:${PATH}";

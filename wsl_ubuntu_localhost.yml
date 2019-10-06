@@ -7,10 +7,14 @@
   - dotnet 
   - docker 
   - R
+  - go
   - k8s
   - wsl
   - profile
   vars:
+    go_checksum: "{{ go.checksum }}"
+    go_dir: "/usr/local/go-{{ go.ver }}"
+    go_ver: "{{ go.ver }}"
     jdk_dir: "/usr/local/openjdk-{{ jdk.ver }}"
     kubectl_dir: "/usr/local/kubectl-{{ k8s.kubectl.ver }}"
     mvn_dir: "/usr/local/apache-maven-{{ mvn.ver }}"
