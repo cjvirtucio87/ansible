@@ -1,12 +1,15 @@
 ---
-- name: Check if Golang is installed
-  stat:
-    path: "{{ go_dir }}/bin/go" 
-  register: golang
-- name: Skipping Golang install
-  debug:
-    msg: "Golang is already installed. Skipping this tasklist."
-  when: golang.stat.exists
+- name: Check if Golang is installed (Ubuntu)
+  block:
+  - name: Grab go version.
+    shell: "{{ go_dir }}/go/bin/go version | cut -d' ' -f3"
+    register: go_version_check
+  - name: Currently installed go version
+    debug:
+      msg: "{{ go_version_check.stdout }}"
+  - name: "Verify go version."
+    set_fact:
+      go_version_verify: "{{ go.ver in go_version_check.stdout }}"
 - name: Install Golang
   block:
   - name: Create staging directory (Ubuntu)
@@ -32,5 +35,5 @@
     file:
       path: "{{ go_staging_dir.path }}"
       state: absent
-  when: not golang.stat.exists
+  when: not go_version_verify
   become: yes
