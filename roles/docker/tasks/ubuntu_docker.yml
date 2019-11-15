@@ -1,12 +1,15 @@
 ---
 - name: Check if Docker is installed (Ubuntu)
-  stat: 
-    path: "/usr/bin/docker"
-  register: docker_check
-- name: Skipping Docker (Ubuntu)
-  debug:
-    msg: "Docker is already installed. Skipping this tasklist."
-  when: docker_check.stat.exists
+  block:
+  - name: Retrieve docker version
+    shell: "dpkg-query --list | grep {{ docker.apt.name }} | awk '{print $3}'"
+    register: docker_installed_version
+  - name: Currently installed version
+    debug:
+      msg: "{{ docker_installed_version.stdout }}"
+  - name: Compare installed version with configured version
+    set_fact:
+      docker_version_compared: "{{ docker.ver in docker_installed_version.stdout }}"
 - name: Install Docker (Ubuntu)
   block:
   - name: Create staging directory (Ubuntu)
@@ -35,7 +38,7 @@
     file:
       path: "{{ docker_staging_dir.path }}"
       state: absent
-  when: not docker_check.stat.exists
+  when: not docker_version_compared
   become: yes
 - name: Docker Post-Install (Ubuntu)
   block:

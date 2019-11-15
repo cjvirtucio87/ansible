@@ -12,6 +12,7 @@ docker:
     components:
     - 'stable'
     url: 'https://download.docker.com/linux/ubuntu'
+  ver: '18.09.7'
 dotnet:
   apt:
     archive:
