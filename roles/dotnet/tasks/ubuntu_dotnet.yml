@@ -1,12 +1,19 @@
 ---
 - name: Check if Dotnet is installed (Ubuntu)
-  stat: 
-    path: "/usr/bin/dotnet"
-  register: dotnet_check
+  block:
+  - name: "Grab dotnet version."
+    command: 'dotnet --version'
+    register: dotnet_version_check
+  - name: "Currently installed dotnet version"
+    debug:
+      msg: "{{ dotnet_version_check.stdout }}"
+  - name: "Verify dotnet version."
+    set_fact:
+      dotnet_version_verify: "{{ dotnet.ver in dotnet_version_check.stdout[:dotnet.ver|length] }}"
 - name: Skipping Dotnet (Ubuntu)
   debug:
     msg: "Dotnet is already installed. Skipping this tasklist."
-  when: dotnet_check.stat.exists
+  when: dotnet_version_verify
 - name: Install Dotnet (Ubuntu)
   block:
   - name: Create staging directory (Ubuntu)
@@ -40,4 +47,4 @@
     file:
       path: "{{ dotnet_staging_dir.path }}"
       state: absent
-  when: not dotnet_check.stat.exists
+  when: not dotnet_version_verify
