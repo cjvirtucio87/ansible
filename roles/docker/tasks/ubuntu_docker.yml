@@ -9,7 +9,7 @@
       msg: "{{ docker_installed_version.stdout }}"
   - name: Compare installed version with configured version
     set_fact:
-      docker_version_compared: "{{ docker.ver in docker_installed_version.stdout }}"
+      docker_version_verify: "{{ docker.ver in docker_installed_version.stdout }}"
 - name: Install Docker (Ubuntu)
   block:
   - name: Create staging directory (Ubuntu)
@@ -38,7 +38,7 @@
     file:
       path: "{{ docker_staging_dir.path }}"
       state: absent
-  when: not docker_version_compared
+  when: not docker_version_verify
   become: yes
 - name: Docker Post-Install (Ubuntu)
   block:
