@@ -10,7 +10,7 @@ export MVN_HOME="{{ mvn_home }}";
 export R_LIBS_USER="{{ r_libs_user }}";
 
 # path
-export PATH="${GOROOT}/bin:${PATH}";
+export PATH="${GOROOT}/bin:${GOPATH}/bin:${PATH}";
 export PATH="{{ kubectl_bin }}:${PATH}";
 export PATH="{{ stowsh_bin }}:${PATH}";
 export PATH="${JAVA_HOME}/bin:${PATH}";
