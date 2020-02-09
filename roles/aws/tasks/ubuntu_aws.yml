@@ -1,0 +1,25 @@
+---
+- name: Install aws-cli
+  block:
+  - name: Create staging directory (Ubuntu)
+    tempfile:
+      state: directory
+      suffix: '_aws'
+    register: aws_staging_dir
+  - name: Download aws-cli installer archive
+    get_url:
+      url: "{{ aws_cli_installer_url }}"
+      dest: "{{ aws_staging_dir.path }}/aws-cli.linux-amd64.tar.gz"
+  - name: Unzip aws-cli installer
+    unarchive:
+      src: "{{ aws_staging_dir.path }}/aws-cli.linux-amd64.tar.gz"
+      dest: "{{ aws_staging_dir.path }}/aws-cli"
+  - name: Run installer
+    command:
+      cmd: ./install
+      chdir: "{{ aws_staging_dir.path }}/aws-cli/aws"
+  always:
+  - name: Clean up staging directory (Ubuntu)
+    file:
+      path: "{{ aws_staging_dir.path }}"
+      state: absent

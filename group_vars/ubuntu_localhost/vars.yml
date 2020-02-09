@@ -1,4 +1,8 @@
 ---
+aws:
+  cli:
+    installer:
+      url: https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip
 docker:
   gpg:
     url: 'https://download.docker.com/linux/ubuntu/gpg'

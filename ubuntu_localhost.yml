@@ -2,6 +2,7 @@
 - name: ubuntu_localhost | Ubuntu on your machine
   hosts: ubuntu_localhost
   roles:
+  - aws
   - stowsh
   - java
   - dotnet 
