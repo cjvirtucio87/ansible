@@ -1,5 +1,9 @@
 ---
 wsl:
+  base:
+    packages:
+    - jq
+    - strace
   home:
     dir: '/home'
   mnt:
