@@ -1,6 +1,6 @@
 ---
 wsl:
-  base:
+  utility:
     packages:
     - jq
     - strace

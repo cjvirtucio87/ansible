@@ -2,7 +2,6 @@
 - name: wsl_ubuntu_localhost | Ubuntu on WSL
   hosts: wsl_ubuntu_localhost
   roles:
-  - base
   - aws
   - stowsh
   - java
@@ -15,7 +14,7 @@
   - profile
   vars:
     aws_cli_installer_url: "{{ aws.cli.installer.url }}"
-    base_packages: "{{ wsl.base.packages }}"
+    utility_packages: "{{ wsl.utility.packages }}"
     go_checksum: "{{ go.checksum }}"
     go_dir: "/usr/local/go-{{ go.ver }}"
     go_ver: "{{ go.ver }}"

@@ -1,3 +1,0 @@
----
-- name: Install base (Ubuntu)
-  import_tasks: ubuntu_base.yml
