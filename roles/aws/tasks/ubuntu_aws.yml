@@ -16,7 +16,7 @@
       dest: "{{ aws_staging_dir.path }}"
   - name: Run installer
     command:
-      cmd: ./install
+      cmd: ./install --update
       chdir: "{{ aws_staging_dir.path }}/aws"
     become: yes
   always:
