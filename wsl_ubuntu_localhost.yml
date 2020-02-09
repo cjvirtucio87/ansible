@@ -1,17 +1,19 @@
 ---
-- name: wsl_ubuntu_localhost | Ubuntu on WSL 
+- name: wsl_ubuntu_localhost | Ubuntu on WSL
   hosts: wsl_ubuntu_localhost
   roles:
+  - aws
   - stowsh
   - java
-  - dotnet 
-  - docker 
+  - dotnet
+  - docker
   - R
   - go
   - k8s
   - wsl
   - profile
   vars:
+    aws_cli_installer_url: "{{ aws.cli.installer.url }}"
     go_checksum: "{{ go.checksum }}"
     go_dir: "/usr/local/go-{{ go.ver }}"
     go_ver: "{{ go.ver }}"
