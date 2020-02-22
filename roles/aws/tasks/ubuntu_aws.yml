@@ -24,3 +24,6 @@
     file:
       path: "{{ aws_staging_dir.path }}"
       state: absent
+- name: Install boto3
+  pip:
+    name: boto3==1.12.5
