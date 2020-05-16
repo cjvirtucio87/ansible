@@ -7,6 +7,7 @@
   - java
   - dotnet
   - docker
+  - hugo
   - R
   - go
   - k8s
@@ -17,6 +18,8 @@
     utility_packages: "{{ wsl.utility.packages }}"
     go_checksum: "{{ go.checksum }}"
     go_dir: "/usr/local/go-{{ go.ver }}"
+    hugo_ver: "{{ hugo.ver }}"
+    hugo_bin: "/usr/local/hugo-{{ hugo.ver }}/bin"
     go_ver: "{{ go.ver }}"
     jdk_dir: "/usr/local/openjdk-{{ jdk.ver }}"
     kubectl_dir: "/usr/local/kubectl-{{ k8s.kubectl.ver }}"
