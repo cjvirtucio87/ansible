@@ -11,6 +11,7 @@ export R_LIBS_USER="{{ r_libs_user }}"
 
 # path
 export PATH="${GOROOT}/bin:${GOPATH}/bin:${PATH}"
+export PATH="{{ bats_dir }}/bin:${PATH}"
 export PATH="{{ hugo_bin }}:${PATH}"
 export PATH="{{ kubectl_bin }}:${PATH}"
 export PATH="{{ stowsh_bin }}:${PATH}"

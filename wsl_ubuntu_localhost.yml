@@ -3,6 +3,7 @@
   hosts: wsl_ubuntu_localhost
   roles:
   - aws
+  - bats
   - stowsh
   - java
   - dotnet
@@ -15,6 +16,9 @@
   - profile
   vars:
     aws_cli_installer_url: "{{ aws.cli.installer.url }}"
+    bats_ver: "{{ bats.ver }}"
+    bats_dir: "/usr/local/bats-{{ bats.ver }}"
+    bats_key_filepath: "/home/{{ managed_user }}/.ssh/id_rsa"
     utility_packages: "{{ wsl.utility.packages }}"
     go_checksum: "{{ go.checksum }}"
     go_dir: "/usr/local/go-{{ go.ver }}"
