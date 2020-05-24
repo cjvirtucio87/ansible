@@ -4,6 +4,7 @@
   roles:
   - aws
   - bats
+  - clconf
   - stowsh
   - java
   - dotnet
@@ -19,6 +20,9 @@
     bats_ver: "{{ bats.ver }}"
     bats_dir: "/usr/local/bats-{{ bats.ver }}"
     bats_key_filepath: "/home/{{ managed_user }}/.ssh/id_rsa"
+    clconf_bin: "/usr/local/bin"
+    clconf_ver: "{{ clconf.ver }}"
+    clconf_platform: "{{ clconf.platform }}"
     utility_packages: "{{ wsl.utility.packages }}"
     go_checksum: "{{ go.checksum }}"
     go_dir: "/usr/local/go-{{ go.ver }}"

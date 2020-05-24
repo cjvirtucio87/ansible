@@ -5,6 +5,9 @@ aws:
       url: https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip
 bats:
   ver: 'v0.4.0'
+clconf:
+  ver: '2.0.13'
+  platform: linux
 docker:
   gpg:
     url: 'https://download.docker.com/linux/ubuntu/gpg'
