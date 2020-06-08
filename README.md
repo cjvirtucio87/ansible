@@ -4,4 +4,4 @@ Playbooks for spinning up infrastructure for your machine. Currently supports `o
 
 ### Usage
 
-`sudo ansible-playbook -i dev.ini <platform>_localhost.yml`
+`MANAGED_USER="$(whoami)" ./init.sh`

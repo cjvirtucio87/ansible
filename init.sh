@@ -17,8 +17,6 @@
 ###     The platform that this script is being executed on.
 ###   PYTHON_VER
 ###     The python version to be used throughout the script.
-###   SKIP_SUBMODULES
-###     Skip initializing git submodules.
 ###   SKIP_DEPS
 ###     Skip installing dependencies for this script..
 ###   SKIP_TEMPLATES
@@ -38,13 +36,6 @@ main() {
   if [ -z "${MANAGED_USER}" ]; then
     echo "must specify the MANAGED_USER environment variable";
     exit 1;
-  fi
-
-  if [[ -z "${SKIP_SUBMODULES}" ]]; then
-    echo 'initializing submodules';
-    git submodule init;
-    git submodule update;
-    echo 'done'
   fi
 
   local clconf_dir='.clconf'
@@ -84,7 +75,7 @@ main() {
     echo 'done';
   fi
 
-  cd "${ROOT_DIR}/ansible";
+  cd "${ROOT_DIR}";
 
   local playbook="${PLATFORM}_localhost.yml";
   echo "running playbook, ${playbook}, with user, ${MANAGED_USER}";
