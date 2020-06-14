@@ -26,7 +26,7 @@ set -e
 ROOT_DIR="$(dirname "$(readlink --canonicalize "$0")")"
 
 ANSIBLE_DEFAULT_VAULT_PASS="${ANSIBLE_DEFAULT_VAULT_PASS:-vault.pass}"
-ANSIBLE_REPO='ppa:ansible/ansible}'
+ANSIBLE_REPO='ppa:ansible/ansible'
 CLCONF_VERSION='2.0.13'
 PLATFORM="${PLATFORM:-wsl_ubuntu}"
 PYTHON_VER='3.6'
