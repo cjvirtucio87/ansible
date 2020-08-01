@@ -65,4 +65,4 @@ go:
   ver: '1.13.1'
 mysqlsh_ver: '8.0.13'
 stowsh:
-  ver: '0.2.6'
+  ver: '0.2.7'
