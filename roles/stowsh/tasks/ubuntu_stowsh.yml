@@ -16,7 +16,7 @@
     register: stowsh_staging_dir
   - name: Download stowsh (Ubuntu)
     get_url:
-      url: "{{ stowsh.url }}"
+      url: "https://github.com/cjvirtucio87/stowsh/releases/download/stowsh-{{ stowsh.ver }}/cjvirtucio87-stowsh-{{ stowsh.ver }}.tar.gz"
       dest: "{{ stowsh_staging_dir.path }}/stowsh-{{ stowsh.ver }}.tar.gz"
   - name: Create content folder (Ubuntu)
     file:

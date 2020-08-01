@@ -65,5 +65,4 @@ go:
   ver: '1.13.1'
 mysqlsh_ver: '8.0.13'
 stowsh:
-  url: 'https://github.com/cjvirtucio87/stowsh/releases/download/0.1.0/cjvirtucio87-stowsh-0.1.0.tar.gz'
-  ver: '0.1.1'
+  ver: '0.2.6'
