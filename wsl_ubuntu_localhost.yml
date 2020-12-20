@@ -8,6 +8,7 @@
   - stowsh
   - java
   - dotnet
+  - python
   - docker
   - hugo
   - R
@@ -32,5 +33,6 @@
     jdk_dir: "/usr/local/openjdk-{{ jdk.ver }}"
     kubectl_dir: "/usr/local/kubectl-{{ k8s.kubectl.ver }}"
     mvn_dir: "/usr/local/apache-maven-{{ mvn.ver }}"
+    python_ver: "{{ python.ver }}"
     r_libs_user: "/home/{{ managed_user }}/.Rlibs/{{ r.ver }}"
     stowsh_dir: "/usr/local/stowsh-{{ stowsh.ver }}"

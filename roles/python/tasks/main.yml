@@ -1,0 +1,5 @@
+---
+- name: Setup Python
+  import_tasks: ubuntu_python.yml
+  ignore_errors: "{{ ansible_check_mode }}"
+
