@@ -1,0 +1,14 @@
+---
+- name: Install software-properties-common
+  package:
+    name: software-properties-common
+    state: present
+
+- name: Install python repo
+  apt_repository:
+    repo: ppa:deadsnakes/ppa
+
+- name: Install python
+  package:
+    name: "python{{ python_ver }}"
+    state: present

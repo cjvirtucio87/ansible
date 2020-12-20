@@ -2,11 +2,14 @@
 
 Playbooks for spinning up infrastructure for your machine. Currently supports `osx` and `ubuntu`.
 
-### Usage
+## Configuration
 
-`MANAGED_USER="$(whoami)" ./init.sh`
+You'll need the password to the vault file located in `/etc/ansible/vault.pass`.
 
-View the header documentation for more info:
+## Usage
 
-`grep ### init.sh`
+Run this command:
 
+```bash
+sudo ansible-playbook -e "managed_user=$(whoami)" <platform>_localhost.yml
+```
