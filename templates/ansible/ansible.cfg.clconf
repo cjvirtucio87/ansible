@@ -1,2 +1,0 @@
-[defaults]
-vault_password_file = {{ getenv "ANSIBLE_DEFAULT_VAULT_PASS" }}
