@@ -8,17 +8,18 @@
   apt_repository:
     repo: ppa:deadsnakes/ppa
 
-- name: Install python
+- name: Install python packages
   package:
-    name: "python{{ python_ver }}"
+    name:
+    - "python{{ python_ver }}"
+    - python3-pip
+    - "python{{ python_ver }}-venv"
     state: present
 
-- name: Install pip
-  package:
-    name: python3-pip
-    state: present
-
-- name: Install specific python3 venv
-  package:
-    name: "python{{ python_ver }}-venv"
-    state: present
+- name: Upgrade setuptools and wheel
+  pip:
+    executable: "pip{{ python_ver }}"
+    name:
+    - setuptools
+    - wheel
+    extra_args: '--upgrade'
