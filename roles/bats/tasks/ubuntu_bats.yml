@@ -2,25 +2,26 @@
 - name: Install bats (Ubuntu)
   block:
   - name: Create staging directory (Ubuntu)
-    tempfile:
+    ansible.builtin.tempfile:
       state: directory
       suffix: '_bats'
     register: bats_staging_dir
-  - name: Clone repo
-    git:
-      repo: 'ssh://git@github.com/sstephenson/bats.git'
+  - name: Unarchive artifact
+    ansible.builtin.unarchive:
+      remote_src: true
+      src: "https://github.com/bats-core/bats-core/archive/refs/tags/v{{ bats.ver }}.tar.gz"
       dest: "{{ bats_staging_dir.path }}"
-      version: "{{ bats_ver }}"
-      key_file: "{{ bats_key_filepath }}"
   - name: Ensure bats_dir exists (Ubuntu)
     file:
       path: "{{ bats_dir }}"
       state: directory
   - name: Run install script
-    command: "{{ bats_staging_dir.path}}/install.sh {{ bats_dir}}"
+    command: "{{ bats_staging_dir.path}}/bats-core-{{ bats.ver }}/install.sh {{ bats_dir}}"
   always:
   - name: Clean up staging directory (Ubuntu)
     file:
       path: "{{ bats_staging_dir.path }}"
       state: absent
   become: yes
+  tags:
+  - bats
