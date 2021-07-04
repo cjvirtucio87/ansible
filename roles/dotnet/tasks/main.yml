@@ -1,10 +1,16 @@
 ---
-- name: Install .NET Core 2.0 (OSX)
+- name: Install .NET Core (OSX)
   import_tasks: osx_dotnet.yml
   when: ansible_distribution == "MacOSX"
-- name: Install .NET Core 2.0 (Ubuntu)
+  tags:
+  - dotnet
+- name: Install .NET Core (Ubuntu)
   import_tasks: ubuntu_dotnet.yml
   when: ansible_distribution == "Ubuntu"
+  tags:
+  - dotnet
 - name: Install Mono (OSX)
   import_tasks: osx_mono.yml
   when: ansible_distribution == "MacOSX"
+  tags:
+  - dotnet

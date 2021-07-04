@@ -10,3 +10,5 @@
     kubectl_bin: "{{ kubectl_dir }}/bin"
     mvn_home: "{{ mvn_dir }}"
     stowsh_bin: "{{ stowsh_dir }}/bin"
+  tags:
+  - profile
