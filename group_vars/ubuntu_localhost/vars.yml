@@ -29,7 +29,7 @@ dotnet:
     key:
       url: 'https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb'
     repo: 'universe'
-  ver: '3.1'
+  ver: '5.0'
 hugo:
   ver: '0.81.0'
 jdk:
