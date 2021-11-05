@@ -1,5 +1,0 @@
----
-- name: Install R (Ubuntu)
-  import_tasks: ubuntu_r.yml
-  when: ansible_distribution == "Ubuntu"
-  ignore_errors: "{{ ansible_check_mode }}"

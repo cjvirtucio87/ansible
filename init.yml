@@ -1,0 +1,7 @@
+---
+- name: Initialize environemnt.
+  hosts: default
+  tasks:
+  - name: include_role docker
+    include_role:
+      name: docker

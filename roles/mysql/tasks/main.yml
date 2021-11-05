@@ -1,4 +1,0 @@
----
-- name: Setup MySQL client
-  import_tasks: client.yml
-  ignore_errors: "{{ ansible_check_mode }}"

@@ -1,4 +1,0 @@
----
-- name: Install kubectl (Ubuntu)
-  import_tasks: ubuntu_kubectl.yml
-  when: ansible_distribution == "Ubuntu"

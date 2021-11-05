@@ -1,0 +1,6 @@
+ansible
+ansible-base
+ansible-lint
+docker
+paramiko
+requests

@@ -1,6 +1,0 @@
----
-- name: Install OpenJDK (UNIX)
-  package:
-    name: "java-{{ jdk.ver }}-openjdk-devel"
-    state: present 
-  become: yes 

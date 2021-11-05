@@ -1,7 +1,48 @@
 ---
-- name: Install Docker (OSX)
-  import_tasks: osx_docker.yml
-  when: ansible_distribution == "MacOSX"
-- name: Install Docker (Ubuntu)
-  import_tasks: ubuntu_docker.yml
-  when: ansible_distribution == "Ubuntu"
+- name: Install requirements
+  ansible.builtin.apt:
+    name:
+    - ca-certificates
+    - curl
+    - gnupg
+    - lsb-release
+    update_cache: True
+  become: True
+
+- name: Install GPG keyring
+  ansible.builtin.apt_key:
+    keyring: /usr/share/keyrings/docker-archive-keyring.gpg
+    url: https://download.docker.com/linux/ubuntu/gpg
+  become: True
+
+- name: Setup Docker repo
+  ansible.builtin.apt_repository:
+    filename: /etc/apt/sources.list.d/docker.list
+    repo: deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu focal stable
+  become: True
+
+- name: Install Docker Engine
+  ansible.builtin.apt:
+    name:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+  become: True
+
+- name: Add Docker Group (Ubuntu)
+  group:
+    name: docker
+    state: present
+  become: True
+
+- name: Checking managed_user (Ubuntu)
+  fail:
+    msg: 'managed_user variable was not set. You can set this by running the playbook with the --extra-vars option.'
+  when: managed_user is not defined
+
+- name: Adding managed_user to Docker Group (Ubuntu)
+  user:
+    groups: docker 
+    append: True
+    name: "{{ managed_user }}"
+  become: True

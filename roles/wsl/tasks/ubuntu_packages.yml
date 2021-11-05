@@ -1,6 +1,0 @@
----
-- name: Ubuntu utility packages
-  package:
-    name: "{{ utility_packages }}"
-    state: present
-  become: yes
