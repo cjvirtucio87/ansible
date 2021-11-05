@@ -1,4 +1,0 @@
----
-- name: Install Hugo (Ubuntu)
-  import_tasks: ubuntu_hugo.yml
-  when: ansible_distribution == "Ubuntu"
