@@ -1,5 +1,5 @@
 ---
-- name: Install requirements
+- name: Install dependencies
   ansible.builtin.apt:
     name:
     - ca-certificates
@@ -21,18 +21,24 @@
     repo: deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu focal stable
   become: True
 
-- name: Shutdown Docker Daemon
+- name: Check Docker service
+  stat: path=/etc/init.d/docker
+  register: service_status
+
+- name: Stop Docker service if exists
   ansible.builtin.systemd:
     name: docker
     state: stopped
   become: True
+  when: service_status.stat.exists
 
-- name: Install Docker Engine
+- name: Install Latest Docker Engine
   ansible.builtin.apt:
     name:
     - docker-ce
     - docker-ce-cli
     - containerd.io
+    state: latest
   become: True
 
 - name: Add Docker Group (Ubuntu)

@@ -8,7 +8,7 @@ readonly ANSIBLE_VENV_DIR="${HOME}/.ansible-venv"
 
 function main {
   sudo apt-get update -y
-  sudo apt-get install -y python3 python3-pip python3-venv
+  sudo apt-get install -y python3 python3-pip python3-venv lsb-core
 
   if [[ ! -d "${ANSIBLE_VENV_DIR}" ]]; then
     python3 -m venv "${ANSIBLE_VENV_DIR}"
