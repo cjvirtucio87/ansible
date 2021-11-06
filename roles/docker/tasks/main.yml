@@ -21,6 +21,12 @@
     repo: deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu focal stable
   become: True
 
+- name: Shutdown Docker Daemon
+  ansible.builtin.systemd:
+    name: docker
+    state: stopped
+  become: True
+
 - name: Install Docker Engine
   ansible.builtin.apt:
     name:
@@ -45,4 +51,10 @@
     groups: docker 
     append: True
     name: "{{ managed_user }}"
+  become: True
+
+- name: Restart Docker Daemon
+  ansible.builtin.systemd:
+    name: docker
+    state: started
   become: True
