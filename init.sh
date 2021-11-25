@@ -2,6 +2,14 @@
 
 set -e
 
+### initialization script for setting up a local dev environment
+###
+### Usage:
+###   <Options> init.sh <Arguments>
+###
+### Options:
+###   STAGES: space separated list of stages to run (default: apt python play)
+
 ROOT_DIR="$(dirname "$(readlink --canonicalize "$0")")"
 readonly ROOT_DIR
 readonly ANSIBLE_VENV_DIR="${HOME}/.ansible-venv"
@@ -37,6 +45,7 @@ function _play {
 function _python {
   if [[ ! -d "${ANSIBLE_VENV_DIR}" ]]; then
     python3 -m venv "${ANSIBLE_VENV_DIR}"
+    # shellcheck disable=SC1090,SC1091
     . "${ANSIBLE_VENV_DIR}/bin/activate"
     python -m pip install pip --upgrade
     python -m pip install wheel setuptools

@@ -4,3 +4,4 @@ dependencies:
 - role: libreoffice
 - role: discord
 - role: nordvpn
+- role: shellcheck
