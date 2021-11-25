@@ -2,83 +2,79 @@
 
 set -e
 
-### Initialization script for the dev environment.
+### initialization script for setting up a local dev environment
 ###
-### Required environment variables:
-###   MANAGED_USER
-###     For specifying the user to be managed by this script, e.g. MANAGED_USER="$(whoami)".
+### Usage:
+###   <Options> init.sh <Arguments>
 ###
-### Optional environment variables:
-###   ANSIBLE_DEFAULT_VAULT_PASS
-###     The default ansible vault password file.
-###   PLATFORM
-###     The platform that this script is being executed on.
-###   SKIP_DEPS
-###     Skip installing dependencies for this script..
-###   SKIP_TEMPLATES
-###     Skip templating pre-playbook configuration.
-###
-### Examples:
-###   SKIP_DEPS=1 ./init.sh (skip dependencies)
-###   SKIP_TEMPLATES=1 ./init.sh (skip templates)
-###   SKIP_DEPS=1 SKIP_TEMPLATES=1 ./init.sh (skip dependencies and templates)
+### Options:
+###   ANSIBLE_FLAGS: additional flags to pass to ansible in the play stage
+###   STAGES: space separated list of stages to run (default: apt python play)
 
 ROOT_DIR="$(dirname "$(readlink --canonicalize "$0")")"
+readonly ROOT_DIR
+readonly ANSIBLE_VENV_DIR="${HOME}/.ansible-venv"
+readonly STAGES="${STAGES:-apt python play}"
 
-ANSIBLE_DEFAULT_VAULT_PASS="${ANSIBLE_DEFAULT_VAULT_PASS:-vault.pass}"
-ANSIBLE_REPO='ppa:ansible/ansible'
-CLCONF_VERSION='2.0.13'
-PLATFORM="${PLATFORM:-wsl_ubuntu}"
-PYTHON_VER='3.6'
-
-main() {
-  if [ -z "${MANAGED_USER}" ]; then
-    echo "must specify the MANAGED_USER environment variable"
-    exit 1
-  fi
-
-  local clconf_dir='.clconf'
-  local clconf_file="${clconf_dir}/${CLCONF_VERSION}"
-  if [[ -z "${SKIP_DEPS}" ]]; then
-    echo 'installing ansible and python'
-    apt update
-    apt install --yes 'software-properties-common'
-    apt-add-repository --yes --update "${ANSIBLE_REPO}"
-    apt-get install -y "python${PYTHON_VER}" 'ansible'
-    apt-get clean
-    echo 'done'
-
-    echo 'installing pip'
-    curl https://bootstrap.pypa.io/get-pip.py | "python${PYTHON_VER}"
-    echo 'done'
-
-    if [[ ! -f "${clconf_file}" ]]; then
-      echo 'installing clconf'
-      mkdir --parents "${clconf_dir}/bin"
-      curl \
-        --location \
-        --output "${clconf_dir}/bin/clconf" \
-        "https://github.com/pastdev/clconf/releases/download/v${CLCONF_VERSION}/clconf-linux"
-      chmod --recursive 0755 "${clconf_dir}/bin"
-      touch "${clconf_file}"
-      echo 'done'
-    fi
-  fi
-
-  if [ -z "${SKIP_TEMPLATES}" ]; then
-    echo 'templating config with clconf'
-    ANSIBLE_DEFAULT_VAULT_PASS="${ANSIBLE_DEFAULT_VAULT_PASS}" "${clconf_dir}/bin/clconf" \
-      template \
-        templates/ansible/ \
-        /etc/ansible/
-    echo 'done'
-  fi
-
-  cd "${ROOT_DIR}"
-
-  local playbook="${PLATFORM}_localhost.yml"
-  echo "running playbook, ${playbook}, with user, ${MANAGED_USER}"
-  ansible-playbook -i dev.ini -e "managed_user=${MANAGED_USER}" "${playbook}"
+function _apt {
+  sudo apt-get update -y
+  sudo apt-get install -y python3 python3-pip python3-venv lsb-core
 }
 
-main "$@"
+function _play {
+  if ! [[ -d "${ANSIBLE_VENV_DIR}" ]]; then
+    >&2 echo "no ansible-venv created; please run the python stage before running the play stage"
+    return 1
+  fi
+
+  # shellcheck disable=SC1090,SC1091
+  . "${ANSIBLE_VENV_DIR}/bin/activate"
+
+  local play_args=(
+    --extra-vars "managed_user=$(whoami)"
+  )
+
+  if [[ -v ANSIBLE_FLAGS ]]; then
+    local flags
+    IFS=' ' read -ra flags <<<"${ANSIBLE_FLAGS}"
+    play_args+=("${flags[@]}")
+  fi
+
+  ansible-playbook ./init.yml "${play_args[@]}"
+}
+
+function _python {
+  if [[ ! -d "${ANSIBLE_VENV_DIR}" ]]; then
+    python3 -m venv "${ANSIBLE_VENV_DIR}"
+    # shellcheck disable=SC1090,SC1091
+    . "${ANSIBLE_VENV_DIR}/bin/activate"
+    python -m pip install pip --upgrade
+    python -m pip install wheel setuptools
+    python -m pip install --requirement "${ROOT_DIR}/requirements.txt"
+    deactivate
+  fi
+}
+
+function main {
+  local stages
+  IFS=' ' read -ra stages <<<"${STAGES}"
+
+  for stage in "${stages[@]}"; do
+    case "${stage}" in
+      apt)
+        _apt
+        ;;
+      play)
+        _play
+        ;;
+      python)
+        _python
+        ;;
+      *)
+        >&2 echo "unsupported stage [${stage}]"
+        return 1
+    esac
+  done
+}
+
+main

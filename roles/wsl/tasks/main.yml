@@ -1,7 +1,0 @@
----
-- name: k8s Post-Install (Ubuntu)
-  import_tasks: ubuntu_k8s.yml
-  when: ansible_distribution == "Ubuntu"
-- name: Utility packages (Ubuntu)
-  import_tasks: ubuntu_packages.yml
-  when: ansible_distribution == "Ubuntu"

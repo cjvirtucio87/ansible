@@ -1,3 +1,0 @@
----
-- name: Install bats (Ubuntu)
-  import_tasks: ubuntu_bats.yml

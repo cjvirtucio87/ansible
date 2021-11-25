@@ -1,0 +1,5 @@
+---
+- name: Install NordVPN deb
+  import_tasks: install_nordvpn.yml
+  tags:
+  - nordvpn

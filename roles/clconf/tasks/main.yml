@@ -1,8 +1,0 @@
----
-- name: Install clconf
-  get_url:
-    url: "https://github.com/pastdev/clconf/releases/download/v{{ clconf_ver }}/clconf-{{ clconf_platform }}"
-    dest: "{{ clconf_bin }}/clconf"
-    mode: 0755
-  tags:
-  - clconf

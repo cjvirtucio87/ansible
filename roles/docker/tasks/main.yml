@@ -1,7 +1,5 @@
 ---
-- name: Install Docker (OSX)
-  import_tasks: osx_docker.yml
-  when: ansible_distribution == "MacOSX"
-- name: Install Docker (Ubuntu)
-  import_tasks: ubuntu_docker.yml
-  when: ansible_distribution == "Ubuntu"
+- name: Install Docker
+  import_tasks: install_docker.yml
+  tags:
+  - docker

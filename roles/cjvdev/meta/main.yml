@@ -1,0 +1,7 @@
+---
+dependencies:
+- role: docker
+- role: libreoffice
+- role: discord
+- role: nordvpn
+- role: shellcheck
