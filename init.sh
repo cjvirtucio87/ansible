@@ -8,6 +8,7 @@ set -e
 ###   <Options> init.sh <Arguments>
 ###
 ### Options:
+###   ANSIBLE_FLAGS: additional flags to pass to ansible in the play stage
 ###   STAGES: space separated list of stages to run (default: apt python play)
 
 ROOT_DIR="$(dirname "$(readlink --canonicalize "$0")")"
