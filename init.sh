@@ -13,6 +13,14 @@ function _apt {
 }
 
 function _play {
+  if ! [[ -d "${ANSIBLE_VENV_DIR}" ]]; then
+    >&2 echo "no ansible-venv created; please run the python stage before running the play stage"
+    return 1
+  fi
+
+  # shellcheck disable=SC1090,SC1091
+  . "${ANSIBLE_VENV_DIR}/bin/activate"
+
   local play_args=(
     --extra-vars "managed_user=$(whoami)"
   )
@@ -38,9 +46,6 @@ function _python {
 }
 
 function main {
-  # shellcheck disable=SC1090,SC1091
-  . "${ANSIBLE_VENV_DIR}/bin/activate"
-
   local stages
   IFS=' ' read -ra stages <<<"${STAGES}"
 
