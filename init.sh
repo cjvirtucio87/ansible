@@ -14,22 +14,26 @@ set -e
 ROOT_DIR="$(dirname "$(readlink --canonicalize "$0")")"
 readonly ROOT_DIR
 readonly ANSIBLE_VENV_DIR="${HOME}/.ansible-venv"
-readonly STAGES="${STAGES:-apt python play}"
+readonly STAGES="${STAGES:-apt python galaxy_install play}"
 
 function _apt {
   sudo apt-get update -y
   sudo apt-get install -y python3 python3-pip python3-venv lsb-core
 }
 
-function _play {
-  if ! [[ -d "${ANSIBLE_VENV_DIR}" ]]; then
-    >&2 echo "no ansible-venv created; please run the python stage before running the play stage"
+function _galaxy_install {
+  # shellcheck disable=SC1090,SC1091
+  . "${ANSIBLE_VENV_DIR}/bin/activate"
+  if ! ansible-galaxy install -r "${ROOT_DIR}/requirements.yml"; then
+    >&2 echo failed to install galaxy requirements
+    deactivate
     return 1
   fi
 
-  # shellcheck disable=SC1090,SC1091
-  . "${ANSIBLE_VENV_DIR}/bin/activate"
+  deactivate
+}
 
+function _run_play {
   local play_args=(
     --extra-vars "managed_user=$(whoami)"
   )
@@ -40,7 +44,30 @@ function _play {
     play_args+=("${flags[@]}")
   fi
 
-  ansible-playbook ./init.yml "${play_args[@]}"
+  ansible-playbook --ask-become-pass ./init.yml "${play_args[@]}"
+}
+
+function _play {
+  if ! [[ -d "${ANSIBLE_VENV_DIR}" ]]; then
+    >&2 echo "no ansible-venv created; please run the python stage before running the play stage"
+    return 1
+  fi
+
+  # shellcheck disable=SC1090,SC1091
+  . "${ANSIBLE_VENV_DIR}/bin/activate"
+  if ! _run_play; then
+    >&2 echo "failed running playbook"
+    deactivate
+    return 1
+  fi
+
+  deactivate
+}
+
+function _pip {
+  python -m pip install pip --upgrade
+  python -m pip install wheel setuptools
+  python -m pip install --requirement "${ROOT_DIR}/requirements.txt"
 }
 
 function _python {
@@ -48,9 +75,12 @@ function _python {
     python3 -m venv "${ANSIBLE_VENV_DIR}"
     # shellcheck disable=SC1090,SC1091
     . "${ANSIBLE_VENV_DIR}/bin/activate"
-    python -m pip install pip --upgrade
-    python -m pip install wheel setuptools
-    python -m pip install --requirement "${ROOT_DIR}/requirements.txt"
+    if ! _pip; then
+      >&2 echo "failed pip install during python stage"
+      deactivate
+      return 1
+    fi
+
     deactivate
   fi
 }
@@ -63,6 +93,9 @@ function main {
     case "${stage}" in
       apt)
         _apt
+        ;;
+      galaxy_install)
+        _galaxy_install
         ;;
       play)
         _play

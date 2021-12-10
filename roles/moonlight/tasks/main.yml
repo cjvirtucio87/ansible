@@ -1,0 +1,8 @@
+---
+- name: Install moonlight
+  community.general.snap:
+    name:
+    - moonlight
+  become: True
+  tags:
+  - moonlight

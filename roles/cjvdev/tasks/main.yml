@@ -1,0 +1,7 @@
+---
+- name: Create profile script
+  ansible.builtin.template:
+    dest: /etc/profile.d/00-cjvdev.sh
+    mode: 0755
+    src: templates/00-cjvdev.sh.j2
+  become: True
