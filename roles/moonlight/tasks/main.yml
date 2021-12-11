@@ -1,4 +1,12 @@
 ---
+# TOOO: find fix for login loop on Ubuntu 20.04
+- name: Install nvidia driver
+  ansible.builtin.apt:
+    name:
+    - nvidia-driver-470
+  become: True
+  tags:
+  - moonlight
 - name: Install moonlight
   community.general.snap:
     name:
