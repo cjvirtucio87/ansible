@@ -62,6 +62,9 @@ function _play {
   fi
 
   deactivate
+
+  >&2 echo "play complete; rebooting in 10 seconds..."
+  sudo shutdown --reboot "$(date --date 'now + 10 seconds' +%H:%M)"
 }
 
 function _pip {
