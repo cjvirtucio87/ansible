@@ -9,6 +9,7 @@ set -e
 ###
 ### Options:
 ###   ANSIBLE_FLAGS: additional flags to pass to ansible in the play stage
+###   SKIP_REBOOT: skip reboot at the end
 ###   STAGES: space separated list of stages to run (default: apt python play)
 
 ROOT_DIR="$(dirname "$(readlink --canonicalize "$0")")"
@@ -63,8 +64,10 @@ function _play {
 
   deactivate
 
-  >&2 echo "play complete; rebooting in 10 seconds..."
-  sudo shutdown --reboot "$(date --date 'now + 10 seconds' +%H:%M)"
+  if [[ ! -v SKIP_REBOOT ]]; then
+    >&2 echo "play complete; rebooting in 10 seconds..."
+    sudo shutdown --reboot "$(date --date 'now + 10 seconds' +%H:%M)"
+  fi
 }
 
 function _pip {

@@ -5,3 +5,10 @@
     mode: 0755
     src: templates/00-cjvdev.sh.j2
   become: True
+
+- name: General utilities
+  ansible.builtin.apt:
+    name:
+    - ethtool
+    - net-tools
+  become: True
