@@ -14,7 +14,7 @@ set -e
 
 ROOT_DIR="$(dirname "$(readlink --canonicalize "$0")")"
 readonly ROOT_DIR
-readonly ANSIBLE_VENV_DIR="${HOME}/.ansible-venv"
+readonly ANSIBLE_VENV_DIR="${ROOT_DIR}/.ansible-venv"
 readonly STAGES="${STAGES:-apt python galaxy_install play}"
 
 function _apt {

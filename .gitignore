@@ -2,3 +2,4 @@
 *.swp
 .clconf
 ansible_collections
+.*venv
