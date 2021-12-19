@@ -12,3 +12,16 @@
     - ethtool
     - net-tools
   become: True
+
+- name: Install clconf
+  ansible.builtin.get_url:
+    dest: /usr/local/bin/clconf
+    mode: 0755
+    url: https://github.com/pastdev/clconf/releases/download/v2.1.5/clconf-linux
+  become: True
+
+- name: Install bash_tools
+  ansible.builtin.include_tasks:
+    file: install_bash_tools.yml
+  vars:
+    bash_tools_dir: /usr/local/lib/bash_tools

@@ -1,0 +1,27 @@
+---
+- name: Create bash_tools dir
+  ansible.builtin.file:
+    mode: 0755
+    path: "{{ bash_tools_dir }}"
+    state: directory
+  become: True
+
+- name: Install bash_tools
+  ansible.builtin.unarchive:
+    dest: "{{ bash_tools_dir }}"
+    mode: 0755
+    src: https://github.com/cjvirtucio87/bash-tools/releases/download/bash-tools-0.1.2/cjvirtucio87-bash-tools-0.1.2.tar.gz
+    remote_src: yes
+  become: True
+
+- name: Create symlinks
+  ansible.builtin.file:
+    mode: 0755
+    path: "/usr/local/bin/{{ bash_tool_path | basename }}"
+    src: "{{ bash_tool_path }}"
+    state: link
+  loop_control:
+    loop_var: bash_tool_path
+  with_fileglob:
+  - "{{ bash_tools_dir }}/bin/*"
+  become: True

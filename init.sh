@@ -36,6 +36,7 @@ function _galaxy_install {
 
 function _run_play {
   local play_args=(
+    --ask-become-pass
     --extra-vars "managed_user=$(whoami)"
   )
 
@@ -45,7 +46,14 @@ function _run_play {
     play_args+=("${flags[@]}")
   fi
 
-  ansible-playbook --ask-become-pass ./init.yml "${play_args[@]}"
+  local cmd=(
+    ansible-playbook
+    "${play_args[@]}"
+    ./init.yml
+  )
+
+  >&2 echo "play cmd: ${cmd[*]}"
+  "${cmd[@]}"
 }
 
 function _play {
