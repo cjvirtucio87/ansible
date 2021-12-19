@@ -1,0 +1,8 @@
+---
+- name: Install OpenVPN
+  ansible.builtin.apt:
+    name:
+    - openvpn
+  tags:
+  - nordvpn
+  become: True
