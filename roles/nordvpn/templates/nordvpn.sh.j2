@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+set -e
+
+### Pass-through to openvpn that connects to NordVPN servers.
+###
+### Usage:
+###   <Options> nordvpn.sh <Arguments>
+###
+### Options:
+###   REGION: the geographic region for the server (default: us-ca)
+###   SERVER: the server id (default: 36)
+###   PROTOCOL: the transport protocol to use (default: udp)
+
+readonly REGION="${REGION:-us-ca}"
+readonly SERVER="${SERVER:-36}"
+readonly PROTOCOL="${PROTOCOL:-udp}"
+
+function main {
+  local ovpn_file="/etc/openvpn/ovpn_${PROTOCOL}/${REGION}${SERVER}.nordvpn.com.${PROTOCOL}.ovpn"
+  >&2 echo "connecting using ovpn_file [${ovpn_file}]"
+  sudo openvpn "${ovpn_file}" "$@"
+}
+
+main "$@"

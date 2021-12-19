@@ -1,0 +1,19 @@
+---
+- name: Install OpenVPN
+  ansible.builtin.apt:
+    name:
+    - openvpn
+  become: True
+
+- name: Install NordVPN configs for OpenVPN
+  ansible.builtin.include_tasks:
+    file: install_openvpn_configs.yml
+  vars:
+    ovpn_config_dir: /etc/ovpn_nordvpn_configs
+
+- name: Create nordvpn.sh script
+  ansible.builtin.template:
+    dest: /usr/local/bin/nordvpn.sh
+    mode: 0755
+    src: templates/nordvpn.sh.j2
+  become: True
