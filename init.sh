@@ -10,16 +10,29 @@ set -e
 ### Options:
 ###   ANSIBLE_FLAGS: additional flags to pass to ansible in the play stage
 ###   SKIP_REBOOT: skip reboot at the end
-###   STAGES: space separated list of stages to run (default: apt python play)
+###   STAGES: space separated list of stages to run (default: all)
 
 ROOT_DIR="$(dirname "$(readlink --canonicalize "$0")")"
 readonly ROOT_DIR
 readonly ANSIBLE_VENV_DIR="${ROOT_DIR}/.ansible-venv"
-readonly STAGES="${STAGES:-apt python galaxy_install play}"
+readonly STAGES="${STAGES:-all}"
 
 function _apt {
   sudo apt-get update -y
   sudo apt-get install -y python3 python3-pip python3-venv lsb-core
+}
+
+function _is_chosen_stage {
+  local stage="$1"
+  local chosen_stages=("${@:2}")
+
+  for chosen_stage in "${chosen_stages[@]}"; do
+    if [[ "${stage}" == 'all' ]] || [[ "${stage}" == "${chosen_stage}" ]]; then
+      return
+    fi
+  done
+
+  return 1
 }
 
 function _galaxy_install {
@@ -100,27 +113,36 @@ function _python {
 }
 
 function main {
-  local stages
-  IFS=' ' read -ra stages <<<"${STAGES}"
+  local chosen_stages
+  IFS=' ' read -ra chosen_stages <<<"${STAGES}"
+
+  local stages=(
+    apt
+    galaxy_install
+    play
+    python
+  )
 
   for stage in "${stages[@]}"; do
-    case "${stage}" in
-      apt)
-        _apt
-        ;;
-      galaxy_install)
-        _galaxy_install
-        ;;
-      play)
-        _play
-        ;;
-      python)
-        _python
-        ;;
-      *)
-        >&2 echo "unsupported stage [${stage}]"
-        return 1
-    esac
+    if _is_chosen_stage "${stage}" "${chosen_stages[@]}"; then
+      case "${stage}" in
+        apt)
+          _apt
+          ;;
+        galaxy_install)
+          _galaxy_install
+          ;;
+        play)
+          _play
+          ;;
+        python)
+          _python
+          ;;
+        *)
+          >&2 echo "unsupported stage [${stage}]"
+          return 1
+      esac
+    fi
   done
 }
 
