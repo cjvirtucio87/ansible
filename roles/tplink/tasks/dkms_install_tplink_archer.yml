@@ -1,0 +1,20 @@
+---
+- name: dkms add driver
+  ansible.builtin.command:
+    cmd: "dkms add -m rtl88x2bu -v {{ package_version }}"
+  become: True
+
+- name: dkms build driver
+  ansible.builtin.command:
+    cmd: "dkms build -m rtl88x2bu -v {{ package_version }}"
+  become: True
+
+- name: dkms install driver
+  ansible.builtin.command:
+    cmd: "dkms install -m rtl88x2bu -v {{ package_version }}"
+  become: True
+
+- name: modprobe rtl88x2bu driver
+  ansible.builtin.modprobe:
+    name: 88x2bu
+  become: True

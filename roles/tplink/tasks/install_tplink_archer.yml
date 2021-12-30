@@ -1,0 +1,28 @@
+---
+- name: Create staging directory
+  ansible.builtin.tempfile:
+    suffix: _archer_install
+    state: directory
+  register: archer_workdir
+
+- name: Download rtl88x2bu source
+  ansible.builtin.unarchive:
+    dest: "{{ archer_workdir.path }}"
+    mode: 0755
+    remote_src: True
+    src: "https://github.com/cilynx/rtl88x2bu/archive/refs/heads/{{ package_version }}_35809.20191129_COEX20191120-7777.zip"
+  become: True
+
+- name: dkms install driver
+  ansible.builtin.include_tasks:
+    file: dkms_install_tplink_archer.yml
+
+- name: Move rtl88x2bu source
+  ansible.builtin.command:
+    cmd: "mv {{ archer_workdir.path }}/rtl88x2bu-{{ package_version }}_35809.20191129_COEX20191120-7777 /usr/src/rtl88x2bu-{{ package_version }}"
+  become: True
+
+- name: Remove staging directory
+  ansible.builtin.file:
+    path: "{{ archer_workdir }}"
+    state: absent
