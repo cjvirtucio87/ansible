@@ -1,0 +1,6 @@
+---
+- name: Install TPLink Archer driver
+  ansible.builtin.include_tasks:
+    file: install_tplink_archer.yml
+  vars:
+    package_version: 5.8.7.1

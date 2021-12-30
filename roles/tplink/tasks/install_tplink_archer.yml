@@ -1,0 +1,10 @@
+---
+- name: dkms status rtl88x2bu
+  ansible.builtin.command:
+    cmd: "dkms status rtl88x2bu"
+  register: dkms_status
+
+- name: dkms install driver
+  ansible.builtin.include_tasks:
+    file: dkms_install_tplink_archer.yml
+  when: not dkms_status.stdout or package_version not in dkms_status.stdout
