@@ -1,7 +1,5 @@
 ---
 - name: Initialize environemnt.
   hosts: default
-  tasks:
-  - name: include_role cjvdev
-    include_role:
-      name: cjvdev
+  roles:
+  - cjvdev

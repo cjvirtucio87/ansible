@@ -6,3 +6,4 @@ dependencies:
 - role: moonlight
 - role: nordvpn
 - role: shellcheck
+- role: vscode
