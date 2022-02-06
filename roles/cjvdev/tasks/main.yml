@@ -5,6 +5,8 @@
     mode: 0755
     src: templates/00-cjvdev.sh.j2
   become: True
+  tags:
+  - cjvdev
 
 - name: General utilities
   ansible.builtin.apt:
@@ -12,6 +14,8 @@
     - ethtool
     - net-tools
   become: True
+  tags:
+  - cjvdev
 
 - name: Install clconf
   ansible.builtin.get_url:
@@ -19,10 +23,17 @@
     mode: 0755
     url: https://github.com/pastdev/clconf/releases/download/v2.1.5/clconf-linux
   become: True
+  tags:
+  - cjvdev
 
 - name: Install bash_tools
   ansible.builtin.include_tasks:
     file: install_bash_tools.yml
+    apply:
+      tags:
+      - cjvdev
   vars:
     bash_tools_dir: /usr/local/lib/bash_tools
     bash_tools_version: 0.1.23
+  tags:
+  - cjvdev
