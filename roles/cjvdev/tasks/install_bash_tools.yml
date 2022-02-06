@@ -10,7 +10,7 @@
   ansible.builtin.unarchive:
     dest: "{{ bash_tools_dir }}"
     mode: 0755
-    src: https://github.com/cjvirtucio87/bash-tools/releases/download/bash-tools-0.1.2/cjvirtucio87-bash-tools-0.1.2.tar.gz
+    src: "https://github.com/cjvirtucio87/bash-tools/releases/download/bash-tools-{{ bash_tools_version }}/cjvirtucio87-bash-tools-{{ bash_tools_version }}.tar.gz"
     remote_src: True
   become: True
 

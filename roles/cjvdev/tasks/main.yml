@@ -25,3 +25,4 @@
     file: install_bash_tools.yml
   vars:
     bash_tools_dir: /usr/local/lib/bash_tools
+    bash_tools_version: 0.1.18
