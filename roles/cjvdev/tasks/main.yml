@@ -32,8 +32,9 @@
     apply:
       tags:
       - cjvdev
+      - bash-tools
   vars:
     bash_tools_dir: /usr/local/lib/bash_tools
-    bash_tools_version: 0.1.23
+    bash_tools_version: 0.1.33
   tags:
   - cjvdev
