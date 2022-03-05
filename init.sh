@@ -27,7 +27,7 @@ function _is_chosen_stage {
   local chosen_stages=("${@:2}")
 
   for chosen_stage in "${chosen_stages[@]}"; do
-    if [[ "${stage}" == 'all' ]] || [[ "${stage}" == "${chosen_stage}" ]]; then
+    if [[ "${chosen_stage}" == 'all' ]] || [[ "${stage}" == "${chosen_stage}" ]]; then
       return
     fi
   done
