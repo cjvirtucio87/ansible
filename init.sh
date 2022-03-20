@@ -118,9 +118,9 @@ function main {
 
   local stages=(
     apt
+    python
     galaxy_install
     play
-    python
   )
 
   for stage in "${stages[@]}"; do
