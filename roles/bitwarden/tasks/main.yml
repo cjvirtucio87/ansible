@@ -1,0 +1,8 @@
+---
+- name: Download and install bw
+  ansible.builtin.unarchive:
+    dest: /usr/local/bin
+    mode: 0755
+    remote_src: True
+    src: "https://vault.bitwarden.com/download/?app=cli&platform=linux"
+  become: True
