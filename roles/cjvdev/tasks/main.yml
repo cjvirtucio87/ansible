@@ -38,3 +38,16 @@
     bash_tools_version: 0.1.42
   tags:
   - cjvdev
+
+- name: Install gh
+  ansible.builtin.include_tasks:
+    file: install_gh.yml
+    apply:
+      tags:
+      - cjvdev
+      - gh
+  vars:
+    gh_dir: /usr/local/lib/gh
+    gh_version: 2.9.0
+  tags:
+  - cjvdev
