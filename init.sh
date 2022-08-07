@@ -19,9 +19,21 @@ readonly ROLES="${ROLES:-cjvdev}"
 readonly STAGES="${STAGES:-all}"
 
 function _apt {
-  _transdebian_repo
   sudo apt-get update -y
-  sudo apt-get install -y python3 python3-pip python3-venv lsb-core systemd-genie
+  sudo apt-get install -y python3 python3-pip python3-venv lsb-core
+}
+
+function _contains {
+  local val="$1"
+  local arr=("${@:2}")
+
+  for item in "${arr[@]}"; do
+    if [[ "${val}" == "${item}" ]]; then
+      return
+    fi
+  done
+
+  return 1
 }
 
 function _is_chosen_stage {
@@ -50,11 +62,13 @@ function _galaxy_install {
 }
 
 function _systemd_setup {
+  _transdebian_repo
+  sudo apt-get install systemd-genie
   # most are based on: https://github.com/arkane-systems/genie/wiki/Systemd-units-known-to-be-problematic-under-WSL
   sudo ssh-keygen -A
   if grep 'LABEL=cloudimg-rootfs' /etc/fstab; then
     >&2 echo "deleting fstab_label"
-    cat /etc/fstab | sudo dd of=/etc/fstab.bak
+    sudo dd of=/etc/fstab.bak if=/etc/fstab
     sudo sed -i "/LABEL=cloudimg-rootfs/d" /etc/fstab
   fi
 
@@ -109,9 +123,10 @@ function _play {
     ./init.yml
   )
 
-  _systemd_setup
-  >&2 echo "play cmd: ${cmd[*]}"
-  genie --command bash -c "$(cat <<EOF
+  if _contains cjvdev_wsl "${ROLES[@]}"; then
+    _systemd_setup
+    >&2 echo "play cmd: ${cmd[*]}"
+    genie --command bash -c "$(cat <<EOF
 . "${ANSIBLE_VENV_DIR}/bin/activate"
 python -m pip install psutil
 command -v ansible-playbook
@@ -119,6 +134,13 @@ cd "${ROOT_DIR}"
 ${cmd[*]}
 EOF
 )"
+    return
+  fi
+
+  # shellcheck disable=SC1090
+  . "${ANSIBLE_VENV_DIR}/bin/activate"
+  command -v ansible-playbook
+  "${cmd[@]}"
 }
 
 function _pip {
