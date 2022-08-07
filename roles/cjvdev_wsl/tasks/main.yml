@@ -5,6 +5,9 @@
     apply:
       tags:
       - cjvdev_wsl
+  vars:
+    clconf_checksum: sha256:2c7ea37e808ef337e43e2a9f2ac1a0c56de5bebd8c8f5a61b6166674f59fe221
+    clconf_version: 3.0.3
   tags:
   - cjvdev_wsl
 

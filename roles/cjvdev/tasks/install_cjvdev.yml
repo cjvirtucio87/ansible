@@ -19,9 +19,10 @@
 
 - name: Install clconf
   ansible.builtin.get_url:
+    checksum: "{{ clconf_checksum }}"
     dest: /usr/local/bin/clconf
     mode: 0755
-    url: https://github.com/pastdev/clconf/releases/download/v2.1.5/clconf-linux
+    url: "https://github.com/pastdev/clconf/releases/download/v{{ clconf_version }}/clconf-linux"
   become: True
   tags:
   - cjvdev
