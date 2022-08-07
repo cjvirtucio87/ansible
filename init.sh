@@ -5,12 +5,37 @@ set -e
 ### initialization script for setting up a local dev environment
 ###
 ### Usage:
-###   <Options> init.sh <Arguments>
+###   <Options> init.sh
 ###
 ### Options:
 ###   ANSIBLE_FLAGS: additional flags to pass to ansible in the play stage
 ###   ROLES: space-delimited list of roles to init (default: cjvdev)
 ###   STAGES: space separated list of stages to run (default: all)
+###
+### Examples:
+###   Initialize the WSL role:
+###     ROLES=cjvdev_wsl ./init.sh
+###
+###   Run only the playbook stage:
+###     STAGES=play ./init.sh
+###
+###   Add verbosity and extra-vars:
+###     ANSIBLE_FLAGS='-vvvvvv --extra-vars "foo=bar"' ./init.sh
+###
+### Remarks:
+###   The codebase was originally written with Ubuntu 20.04 in mind. Some
+###   changes were necessary to support Ubuntu 20.04 on WSL2. Notably,
+###   genie had to be integrated. genie is an app that initializes
+###   a separate kernel namespace for systemd, giving it a place
+###   to own PID 1. This allows systemd to function as normal, particularly
+###   for use with docker.
+###
+###   See the following articles for more information:
+###
+###   * https://askubuntu.com/a/1379567
+###   * https://www.nginx.com/blog/what-are-namespaces-cgroups-how-do-they-work/
+###   * https://man7.org/linux/man-pages/man2/unshare.2.html
+###   * https://github.com/arkane-systems/genie
 
 ROOT_DIR="$(dirname "$(readlink --canonicalize "$0")")"
 readonly ROOT_DIR
