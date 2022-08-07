@@ -1,9 +1,0 @@
----
-- name: Install LibreOffice
-  ansible.builtin.apt:
-    name:
-      - libreoffice
-    update_cache: True
-  become: True
-  tags:
-  - libreoffice
