@@ -9,17 +9,19 @@ set -e
 ###
 ### Options:
 ###   ANSIBLE_FLAGS: additional flags to pass to ansible in the play stage
-###   SKIP_REBOOT: skip reboot at the end
+###   ROLES: space-delimited list of roles to init (default: cjvdev)
 ###   STAGES: space separated list of stages to run (default: all)
 
 ROOT_DIR="$(dirname "$(readlink --canonicalize "$0")")"
 readonly ROOT_DIR
 readonly ANSIBLE_VENV_DIR="${ROOT_DIR}/.ansible-venv"
+readonly ROLES="${ROLES:-cjvdev}"
 readonly STAGES="${STAGES:-all}"
 
 function _apt {
+  _transdebian_repo
   sudo apt-get update -y
-  sudo apt-get install -y python3 python3-pip python3-venv lsb-core
+  sudo apt-get install -y python3 python3-pip python3-venv lsb-core systemd-genie
 }
 
 function _is_chosen_stage {
@@ -47,10 +49,52 @@ function _galaxy_install {
   deactivate
 }
 
-function _run_play {
+function _systemd_setup {
+  # most are based on: https://github.com/arkane-systems/genie/wiki/Systemd-units-known-to-be-problematic-under-WSL
+  sudo ssh-keygen -A
+  if grep 'LABEL=cloudimg-rootfs' /etc/fstab; then
+    >&2 echo "deleting fstab_label"
+    cat /etc/fstab | sudo dd of=/etc/fstab.bak
+    sudo sed -i "/LABEL=cloudimg-rootfs/d" /etc/fstab
+  fi
+
+  genie --command bash -c "systemctl --failed | grep -E '^●' | awk '{print \$2}' | xargs sudo systemctl start"
+}
+
+function _transdebian_repo {
+  local repo_cfg
+  read -r -d '' repo_cfg <<EOF || :
+deb https://arkane-systems.github.io/wsl-transdebian/apt/ $(lsb_release -cs) main
+deb-src https://arkane-systems.github.io/wsl-transdebian/apt/ $(lsb_release -cs) main
+EOF
+
+  local repo_list=/etc/apt/sources.list.d/wsl-transdebian.list
+  if [[ -f "${repo_list}" ]] && diff <(echo "${repo_cfg}") "${repo_list}"; then
+    >&2 echo "transdebian repo already setup"
+    return
+  fi
+
+  sudo curl \
+    --location \
+    --output /etc/apt/trusted.gpg.d/wsl-transdebian.gpg \
+    https://arkane-systems.github.io/wsl-transdebian/apt/wsl-transdebian.gpg
+
+  sudo chmod a+r /etc/apt/trusted.gpg.d/wsl-transdebian.gpg
+  echo "${repo_cfg}" | sudo dd of="${repo_list}"
+}
+
+function _play {
+  if ! [[ -d "${ANSIBLE_VENV_DIR}" ]]; then
+    >&2 echo "no ansible-venv created; please run the python stage before running the play stage"
+    return 1
+  fi
+
+  # intentionally quoting the init_roles json
+  # shellcheck disable=SC2027
   local play_args=(
     --ask-become-pass
     --extra-vars "managed_user=$(whoami)"
+    --extra-vars "'{\"init_roles\": [$(IFS=, echo -n "${ROLES[*]}")]}'"
   )
 
   if [[ -v ANSIBLE_FLAGS ]]; then
@@ -65,30 +109,16 @@ function _run_play {
     ./init.yml
   )
 
+  _systemd_setup
   >&2 echo "play cmd: ${cmd[*]}"
-  "${cmd[@]}"
-}
-
-function _play {
-  if ! [[ -d "${ANSIBLE_VENV_DIR}" ]]; then
-    >&2 echo "no ansible-venv created; please run the python stage before running the play stage"
-    return 1
-  fi
-
-  # shellcheck disable=SC1090,SC1091
-  . "${ANSIBLE_VENV_DIR}/bin/activate"
-  if ! _run_play; then
-    >&2 echo "failed running playbook"
-    deactivate
-    return 1
-  fi
-
-  deactivate
-
-  if [[ ! -v SKIP_REBOOT ]]; then
-    >&2 echo "play complete; rebooting in 10 seconds..."
-    sudo shutdown --reboot "$(date --date 'now + 10 seconds' +%H:%M)"
-  fi
+  genie --command bash -c "$(cat <<EOF
+. "${ANSIBLE_VENV_DIR}/bin/activate"
+python -m pip install psutil
+command -v ansible-playbook
+cd "${ROOT_DIR}"
+${cmd[*]}
+EOF
+)"
 }
 
 function _pip {

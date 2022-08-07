@@ -1,5 +1,10 @@
 ---
-- name: Initialize environemnt.
+- name: Initialize environment.
   hosts: default
-  roles:
-  - cjvdev
+  tasks:
+  - name: "Include role {{ role }}"
+    ansible.builtin.include_role:
+      name: "{{ role }}"
+    loop: "{{ init_roles }}"
+    loop_control:
+      loop_var: role

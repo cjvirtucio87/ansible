@@ -1,4 +1,10 @@
 ---
+- name: Ensure unzip is installed
+  ansible.builtin.apt:
+    name: unzip
+    update_cache: True
+  become: True
+
 - name: Download and install bw
   ansible.builtin.unarchive:
     dest: /usr/local/bin

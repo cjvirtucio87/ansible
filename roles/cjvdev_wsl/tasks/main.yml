@@ -1,22 +1,22 @@
 ---
 - name: Install cjvdev
   ansible.builtin.include_tasks:
-    file: install_cjvdev.yml
+    file: roles/cjvdev/tasks/install_cjvdev.yml
     apply:
       tags:
-      - cjvdev
+      - cjvdev_wsl
   tags:
-  - cjvdev
+  - cjvdev_wsl
 
 - name: Install gh
   ansible.builtin.include_tasks:
-    file: install_gh.yml
+    file: roles/cjvdev/tasks/install_gh.yml
     apply:
       tags:
-      - cjvdev
+      - cjvdev_wsl
       - gh
   vars:
     gh_dir: /usr/local/lib/gh
     gh_version: 2.9.0
   tags:
-  - cjvdev
+  - cjvdev_wsl
