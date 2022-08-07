@@ -196,6 +196,8 @@ function main {
       esac
     fi
   done
+
+  >&2 echo "All set! If this script was run for a WSL role, remember to run genie --shell to enter the kernel namespace mounted for systemd."
 }
 
 main
