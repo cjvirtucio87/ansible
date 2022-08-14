@@ -3,7 +3,9 @@
 set -e
 
 function main {
-  genie --initialize &>/dev/null &
+  if ! pgrep -xo systemd; then
+    genie --initialize &>/dev/null &
+  fi
 
   while ! pgrep -xo systemd; do
     >&2 echo "waiting for systemd"
