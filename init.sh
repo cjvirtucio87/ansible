@@ -132,7 +132,6 @@ function _play {
   # shellcheck disable=SC2027
   local play_args=(
     --ask-become-pass
-    --extra-vars "managed_user=$(whoami)"
     --extra-vars "'{\"init_roles\": [$(IFS=, echo -n "${ROLES[*]}")]}'"
   )
 
@@ -222,7 +221,7 @@ function main {
     fi
   done
 
-  >&2 echo "All set! If this script was run for a WSL role, remember to run genie --shell to enter the kernel namespace mounted for systemd."
+  >&2 echo 'All set! If this script was run for a WSL role, remember to run "${HOME}/bin/systemd_start.sh" to enter the kernel namespace mounted for systemd.'
 }
 
 main

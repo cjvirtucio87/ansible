@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -e
+
+function main {
+  if ! pgrep -xo systemd; then
+    genie --initialize &>/dev/null &
+  fi
+
+  while ! pgrep -xo systemd; do
+    >&2 echo "waiting for systemd"
+    sleep 1
+  done
+
+  genie --command bash -c "systemctl --failed | grep -E '^●' | awk '{print \$2}' | xargs -I {} sudo systemctl start {}"
+
+  genie --shell
+}
+
+main

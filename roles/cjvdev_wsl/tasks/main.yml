@@ -1,4 +1,19 @@
 ---
+- name: Checking HOME (Ubuntu)
+  ansible.builtin.assert:
+    that:
+      - lookup('ansible.builtin.env', 'HOME') | length > 0
+    fail_msg: 'HOME environment variable was not set. This is needed so the play knows where to place the systemd_start.sh script.'
+
+- name: Create systemd_start.sh script
+  ansible.builtin.template:
+    dest: "{{ lookup('ansible.builtin.env', 'HOME') }}/bin/systemd_start.sh" 
+    mode: 0755
+    src: templates/systemd_start.sh.j2
+  become: True
+  tags:
+  - cjvdev_wsl
+
 - name: Install cjvdev
   ansible.builtin.include_tasks:
     file: roles/cjvdev/tasks/install_cjvdev.yml

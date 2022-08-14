@@ -47,16 +47,17 @@
     state: present
   become: True
 
-- name: Checking managed_user (Ubuntu)
-  fail:
-    msg: 'managed_user variable was not set. You can set this by running the playbook with the --extra-vars option.'
-  when: managed_user is not defined
+- name: Checking USER (Ubuntu)
+  ansible.builtin.assert:
+    that:
+      - lookup('ansible.builtin.env', 'USER') | length > 0
+    fail_msg: 'USER environment variable was not set. This is needed so the play knows who to add to the docker group.'
 
-- name: Adding managed_user to Docker Group (Ubuntu)
+- name: Adding USER to Docker Group (Ubuntu)
   user:
     groups: docker
     append: True
-    name: "{{ managed_user }}"
+    name: "{{ lookup('ansible.builtin.env', 'USER') }}"
   become: True
 
 - name: Restart Docker Daemon
