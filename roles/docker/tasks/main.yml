@@ -1,3 +1,8 @@
 ---
 - name: Install Docker
   import_tasks: install_docker.yml
+
+- name: Install nvidia-container-toolkit
+  import_tasks: install_nvidia_container_toolkit.yml
+  vars:
+    keyring_path: /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
