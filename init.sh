@@ -132,7 +132,7 @@ function _play {
   # shellcheck disable=SC2027
   local play_args=(
     --ask-become-pass
-    --extra-vars "'{\"init_roles\": [$(IFS=, echo -n "${ROLES[*]}")]}'"
+    --extra-vars "{\"init_roles\": [$(IFS=, echo -n "${ROLES[*]}")]}"
   )
 
   if [[ -v ANSIBLE_FLAGS ]]; then
