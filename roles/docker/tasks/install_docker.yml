@@ -22,7 +22,7 @@
   become: true
 
 - name: Check Docker service
-  stat: path=/etc/init.d/docker
+  ansible.builtin.stat: path=/etc/init.d/docker
   register: service_status
 
 - name: Stop Docker service if exists
@@ -32,17 +32,16 @@
   become: true
   when: service_status.stat.exists
 
-- name: Install Latest Docker Engine
+- name: Install Docker Engine
   ansible.builtin.apt:
     name:
       - docker-ce
       - docker-ce-cli
       - containerd.io
-    state: latest
   become: true
 
 - name: Add Docker Group (Ubuntu)
-  group:
+  ansible.builtin.group:
     name: docker
     state: present
   become: true
@@ -54,7 +53,7 @@
     fail_msg: 'USER environment variable was not set. This is needed so the play knows who to add to the docker group.'
 
 - name: Adding USER to Docker Group (Ubuntu)
-  user:
+  ansible.builtin.user:
     groups: docker
     append: true
     name: "{{ lookup('ansible.builtin.env', 'USER') }}"

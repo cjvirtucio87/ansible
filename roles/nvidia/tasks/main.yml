@@ -3,6 +3,7 @@
   ansible.builtin.git:
     dest: "{{ lookup('env', 'HOME') }}/git/ffmpeg-ffmpeg"
     repo: https://git.ffmpeg.org/ffmpeg.git
+    version: n5.1
   tags:
     - nvidia
 
@@ -26,6 +27,7 @@
   ansible.builtin.git:
     dest: "{{ lookup('env', 'HOME') }}/git/ffmpeg-nv-codec-headers"
     repo: https://github.com/FFmpeg/nv-codec-headers
+    version: n11.1.5.2
 
 - name: Install nv-codec-headers
   ansible.builtin.command:
