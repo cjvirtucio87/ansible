@@ -12,7 +12,7 @@ on:
 jobs:
   ansible-lint:
     name: Ansbile Lint
-    runs-on: ubuntu:latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: Run ansible-lint
