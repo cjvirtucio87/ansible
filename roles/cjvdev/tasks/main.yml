@@ -9,17 +9,17 @@
     clconf_checksum: sha256:2c7ea37e808ef337e43e2a9f2ac1a0c56de5bebd8c8f5a61b6166674f59fe221
     clconf_version: 3.0.3
   tags:
-  - cjvdev
+    - cjvdev
 
 - name: Install gh
   ansible.builtin.include_tasks:
     file: install_gh.yml
     apply:
       tags:
-      - cjvdev
-      - gh
+        - cjvdev
+        - gh
   vars:
     gh_dir: /usr/local/lib/gh
     gh_version: 2.9.0
   tags:
-  - cjvdev
+    - cjvdev

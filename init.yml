@@ -2,9 +2,9 @@
 - name: Initialize environment.
   hosts: default
   tasks:
-  - name: "Include role {{ role }}"
-    ansible.builtin.include_role:
-      name: "{{ role }}"
-    loop: "{{ init_roles }}"
-    loop_control:
-      loop_var: role
+    - name: "Include role {{ role }}"
+      ansible.builtin.include_role:
+        name: "{{ role }}"
+      loop: "{{ init_roles }}"
+      loop_control:
+        loop_var: role

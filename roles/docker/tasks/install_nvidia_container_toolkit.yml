@@ -3,7 +3,7 @@
   ansible.builtin.apt_key:
     keyring: "{{ keyring_path }}"
     url: https://nvidia.github.io/libnvidia-container/gpgkey
-  become: True
+  become: true
 
 - name: Setup NVIDIA Container Toolkit repo
   ansible.builtin.apt_repository:
@@ -11,24 +11,24 @@
     repo: |
       deb [signed-by={{ keyring_path }}] https://nvidia.github.io/libnvidia-container/stable/ubuntu18.04/$(ARCH) /
       #deb [signed-by={{ keyring_path }}] https://nvidia.github.io/libnvidia-container/experimental/ubuntu18.04/$(ARCH) /
-  become: True
+  become: true
 
 - name: Stop Docker service if exists
   ansible.builtin.systemd:
     name: docker
     state: stopped
-  become: True
+  become: true
   when: service_status.stat.exists
 
 - name: Install Latest nvidia-container-toolkit
   ansible.builtin.apt:
     name:
-    - nvidia-docker2
+      - nvidia-docker2
     state: latest
-  become: True
+  become: true
 
 - name: Restart Docker Daemon
   ansible.builtin.systemd:
     name: docker
     state: started
-  become: True
+  become: true

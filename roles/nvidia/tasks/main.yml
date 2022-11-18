@@ -4,23 +4,23 @@
     dest: "{{ lookup('env', 'HOME') }}/git/ffmpeg-ffmpeg"
     repo: https://git.ffmpeg.org/ffmpeg.git
   tags:
-  - nvidia
+    - nvidia
 
 - name: Install CUDA keyring
   ansible.builtin.apt:
     deb: https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb
-  become: True
+  become: true
   tags:
-  - nvidia
+    - nvidia
 
 - name: Install CUDA
   ansible.builtin.apt:
     name:
-    - cuda
+      - cuda
     update_cache: true
-  become: True
+  become: true
   tags:
-  - nvidia
+    - nvidia
 
 - name: Clone nv-codec-headers repo
   ansible.builtin.git:
@@ -30,47 +30,47 @@
 - name: Install nv-codec-headers
   ansible.builtin.command:
     argv:
-    - make
-    - install
+      - make
+      - install
     chdir: "{{ lookup('env', 'HOME') }}/git/ffmpeg-nv-codec-headers"
   tags:
-  - nvidia
-  become: True
+    - nvidia
+  become: true
 
 - name: Configure ffmpeg install
   ansible.builtin.command:
     argv:
-    - ./configure
-    - '--enable-cuda'
-    - '--enable-cuvid'
-    - '--enable-nvdec'
-    - '--enable-nvenc'
-    - '--enable-nonfree'
-    - '--enable-libnpp'
-    - '--extra-cflags=-I/usr/local/cuda/include'
-    - '--extra-ldflags=-L/usr/local/cuda/lib64'
+      - ./configure
+      - '--enable-cuda'
+      - '--enable-cuvid'
+      - '--enable-nvdec'
+      - '--enable-nvenc'
+      - '--enable-nonfree'
+      - '--enable-libnpp'
+      - '--extra-cflags=-I/usr/local/cuda/include'
+      - '--extra-ldflags=-L/usr/local/cuda/lib64'
     chdir: "{{ lookup('env', 'HOME') }}/git/ffmpeg-ffmpeg"
   tags:
-  - nvidia
-  become: True
+    - nvidia
+  become: true
 
 - name: Build ffmpeg
   ansible.builtin.command:
     argv:
-    - make
-    - '-j'
-    - '-s'
+      - make
+      - '-j'
+      - '-s'
     chdir: "{{ lookup('env', 'HOME') }}/git/ffmpeg-ffmpeg"
   tags:
-  - nvidia
-  become: True
+    - nvidia
+  become: true
 
 - name: Install ffmpeg
   ansible.builtin.command:
     argv:
-    - make
-    - install
+      - make
+      - install
     chdir: "{{ lookup('env', 'HOME') }}/git/ffmpeg-ffmpeg"
   tags:
-  - nvidia
-  become: True
+    - nvidia
+  become: true

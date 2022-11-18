@@ -4,15 +4,15 @@
     mode: 0755
     path: "{{ gh_dir }}"
     state: directory
-  become: True
+  become: true
 
 - name: Install gh
   ansible.builtin.unarchive:
     dest: "{{ gh_dir }}"
     mode: 0755
     src: "https://github.com/cli/cli/releases/download/v{{ gh_version }}/gh_{{ gh_version }}_linux_amd64.tar.gz"
-    remote_src: True
-  become: True
+    remote_src: true
+  become: true
 
 - name: Create symlinks
   ansible.builtin.file:
@@ -23,5 +23,5 @@
   loop_control:
     loop_var: gh_bin_path
   with_fileglob:
-  - "{{ gh_dir }}/gh_{{ gh_version }}_linux_amd64/bin/*"
-  become: True
+    - "{{ gh_dir }}/gh_{{ gh_version }}_linux_amd64/bin/*"
+  become: true

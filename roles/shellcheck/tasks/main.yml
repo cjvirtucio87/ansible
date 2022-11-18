@@ -2,7 +2,7 @@
 - name: Install shellcheck
   ansible.builtin.apt:
     name:
-    - shellcheck
-  become: True
+      - shellcheck
+  become: true
   tags:
-  - shellcheck
+    - shellcheck
