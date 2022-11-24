@@ -4,3 +4,8 @@ dependencies:
   - role: bitwarden
   - role: shellcheck
   - role: nvidia
+galaxy_info:
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
