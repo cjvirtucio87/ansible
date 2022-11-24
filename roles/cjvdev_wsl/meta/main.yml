@@ -3,8 +3,3 @@ dependencies:
   - role: docker
   - role: bitwarden
   - role: shellcheck
-galaxy_info:
-  platforms:
-    - name: Ubuntu
-      versions:
-        - all
