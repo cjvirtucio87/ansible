@@ -1,78 +1,46 @@
 ---
-- name: Clone ffmpeg repo
-  ansible.builtin.git:
-    dest: "{{ lookup('env', 'HOME') }}/git/ffmpeg-ffmpeg"
-    repo: https://git.ffmpeg.org/ffmpeg.git
-    version: n5.1
+- name: ffmpeg check
+  ansible.builtin.shell:
+    cmd: |
+      expected_flags=(
+        --enable-cuda
+        --enable-cuvid
+        --enable-nvdec
+        --enable-nvenc
+        --enable-nonfree
+        --enable-libnpp
+        --extra-cflags=-I/usr/local/cuda/include
+        --extra-ldflags=-L/usr/local/cuda/lib64
+      )
+
+      actual_flags=($(ffmpeg 2>&1 | grep 'configuration: ' | cut -d':' -f2))
+      missing_flags=()
+      for ef in {{ '"${expected_flags[@]}"' }}; do
+        found=false
+        for af in {{ '"${actual_flags[@]}"' }}; do
+          if [[ "${ef}" == "${af}" ]]; then
+            found=true
+            break
+          fi
+        done
+
+        if [[ {{ '"${found}"' }} == false ]]; then
+          missing_flags+=("${ef}")
+        fi
+      done
+
+      if [[ {{ '"${#missing_flags[@]}"' }} == 0 ]]; then
+        exit
+      fi
+
+      for mf in {{ '"${missing_flags[@]}"' }}; do
+        >&2 echo {{ '"missing flag ${mf}"' }}
+      done
+
+      exit 1
+    executable: bash
+  changed_when: "ffmpeg_check.rc != 0"
+  notify: ffmpeg_check
+  register: ffmpeg_check
   tags:
     - nvidia
-
-- name: Install CUDA keyring
-  ansible.builtin.apt:
-    deb: https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb
-  become: true
-  tags:
-    - nvidia
-
-- name: Install CUDA
-  ansible.builtin.apt:
-    name:
-      - cuda
-    update_cache: true
-  become: true
-  tags:
-    - nvidia
-
-- name: Clone nv-codec-headers repo
-  ansible.builtin.git:
-    dest: "{{ lookup('env', 'HOME') }}/git/ffmpeg-nv-codec-headers"
-    repo: https://github.com/FFmpeg/nv-codec-headers
-    version: n11.1.5.2
-
-- name: Install nv-codec-headers
-  ansible.builtin.command:
-    argv:
-      - make
-      - install
-    chdir: "{{ lookup('env', 'HOME') }}/git/ffmpeg-nv-codec-headers"
-  tags:
-    - nvidia
-  become: true
-
-- name: Configure ffmpeg install
-  ansible.builtin.command:
-    argv:
-      - ./configure
-      - '--enable-cuda'
-      - '--enable-cuvid'
-      - '--enable-nvdec'
-      - '--enable-nvenc'
-      - '--enable-nonfree'
-      - '--enable-libnpp'
-      - '--extra-cflags=-I/usr/local/cuda/include'
-      - '--extra-ldflags=-L/usr/local/cuda/lib64'
-    chdir: "{{ lookup('env', 'HOME') }}/git/ffmpeg-ffmpeg"
-  tags:
-    - nvidia
-  become: true
-
-- name: Build ffmpeg
-  ansible.builtin.command:
-    argv:
-      - make
-      - '-j'
-      - '-s'
-    chdir: "{{ lookup('env', 'HOME') }}/git/ffmpeg-ffmpeg"
-  tags:
-    - nvidia
-  become: true
-
-- name: Install ffmpeg
-  ansible.builtin.command:
-    argv:
-      - make
-      - install
-    chdir: "{{ lookup('env', 'HOME') }}/git/ffmpeg-ffmpeg"
-  tags:
-    - nvidia
-  become: true

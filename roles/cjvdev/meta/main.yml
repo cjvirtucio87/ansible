@@ -1,9 +1,9 @@
 ---
 dependencies:
   - role: docker
-  - role: bitwarden
-  - role: shellcheck
-  - role: nvidia
+    #  - role: bitwarden
+    #  - role: shellcheck
+    #  - role: nvidia
 galaxy_info:
   platforms:
     - name: Ubuntu

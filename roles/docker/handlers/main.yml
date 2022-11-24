@@ -1,0 +1,13 @@
+---
+- name: Install Docker
+  ansible.builtin.import_tasks: install_docker.yml
+
+- name: Install NVIDIA Container Toolkit
+  ansible.builtin.import_tasks: install_nvidia_container_toolkit.yml
+
+- name: Restart Docker Daemon
+  ansible.builtin.systemd:
+    name: docker
+    state: started
+  become: true
+  listen: docker_stopped

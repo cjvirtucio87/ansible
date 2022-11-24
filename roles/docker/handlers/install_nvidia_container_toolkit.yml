@@ -10,25 +10,10 @@
     filename: /etc/apt/sources.list.d/nvidia-container-toolkit.list
     repo: |
       deb [signed-by={{ keyring_path }}] https://nvidia.github.io/libnvidia-container/stable/ubuntu18.04/$(ARCH) /
-      #deb [signed-by={{ keyring_path }}] https://nvidia.github.io/libnvidia-container/experimental/ubuntu18.04/$(ARCH) /
   become: true
-
-- name: Stop Docker service if exists
-  ansible.builtin.systemd:
-    name: docker
-    state: stopped
-  become: true
-  when: service_status.stat.exists
 
 - name: Install Latest nvidia-container-toolkit
   ansible.builtin.apt:
     name:
       - nvidia-docker2
-    state: latest
-  become: true
-
-- name: Restart Docker Daemon
-  ansible.builtin.systemd:
-    name: docker
-    state: started
   become: true
