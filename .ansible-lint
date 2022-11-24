@@ -1,3 +1,6 @@
 ---
 exclude_paths:
 - requirements.yml
+skip_list:
+# we do not generate roles with ansible-galaxy
+- meta-no-info
