@@ -4,3 +4,4 @@ dependencies:
   - role: bitwarden
   - role: shellcheck
   - role: nvidia
+  - role: tplink
