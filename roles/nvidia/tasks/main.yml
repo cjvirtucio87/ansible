@@ -1,5 +1,5 @@
 ---
-- name: ffmpeg check
+- name: Checking ffmpeg
   ansible.builtin.shell:
     cmd: |
       expected_flags=(

@@ -1,5 +1,5 @@
 ---
-- name: dkms status rtl88x2bu
+- name: Check rtl88x2bu status
   ansible.builtin.command:
     cmd: "dkms status rtl88x2bu"
   notify: install_driver
