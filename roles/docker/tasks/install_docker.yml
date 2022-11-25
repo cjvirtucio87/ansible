@@ -2,66 +2,34 @@
 - name: Install dependencies
   ansible.builtin.apt:
     name:
-    - ca-certificates
-    - curl
-    - gnupg
-    - lsb-release
-    update_cache: True
-  become: True
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+    update_cache: true
+  become: true
 
 - name: Install GPG keyring
   ansible.builtin.apt_key:
     keyring: /usr/share/keyrings/docker-archive-keyring.gpg
     url: https://download.docker.com/linux/ubuntu/gpg
-  become: True
+  become: true
 
 - name: Setup Docker repo
   ansible.builtin.apt_repository:
     filename: /etc/apt/sources.list.d/docker.list
     repo: deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu focal stable
-  become: True
+  become: true
 
 - name: Check Docker service
-  stat: path=/etc/init.d/docker
+  ansible.builtin.stat:
+    path: /etc/init.d/docker
   register: service_status
 
 - name: Stop Docker service if exists
   ansible.builtin.systemd:
     name: docker
     state: stopped
-  become: True
+  become: true
+  notify: docker_stopped
   when: service_status.stat.exists
-
-- name: Install Latest Docker Engine
-  ansible.builtin.apt:
-    name:
-    - docker-ce
-    - docker-ce-cli
-    - containerd.io
-    state: latest
-  become: True
-
-- name: Add Docker Group (Ubuntu)
-  group:
-    name: docker
-    state: present
-  become: True
-
-- name: Checking USER (Ubuntu)
-  ansible.builtin.assert:
-    that:
-      - lookup('ansible.builtin.env', 'USER') | length > 0
-    fail_msg: 'USER environment variable was not set. This is needed so the play knows who to add to the docker group.'
-
-- name: Adding USER to Docker Group (Ubuntu)
-  user:
-    groups: docker
-    append: True
-    name: "{{ lookup('ansible.builtin.env', 'USER') }}"
-  become: True
-
-- name: Restart Docker Daemon
-  ansible.builtin.systemd:
-    name: docker
-    state: started
-  become: True

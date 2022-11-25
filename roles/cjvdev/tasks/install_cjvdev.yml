@@ -4,18 +4,18 @@
     dest: /etc/profile.d/00-cjvdev.sh
     mode: 0755
     src: roles/cjvdev/templates/00-cjvdev.sh.j2
-  become: True
+  become: true
   tags:
-  - cjvdev
+    - cjvdev
 
 - name: General utilities
   ansible.builtin.apt:
     name:
-    - ethtool
-    - net-tools
-  become: True
+      - ethtool
+      - net-tools
+  become: true
   tags:
-  - cjvdev
+    - cjvdev
 
 - name: Install clconf
   ansible.builtin.get_url:
@@ -23,6 +23,6 @@
     dest: /usr/local/bin/clconf
     mode: 0755
     url: "https://github.com/pastdev/clconf/releases/download/v{{ clconf_version }}/clconf-linux"
-  become: True
+  become: true
   tags:
-  - cjvdev
+    - cjvdev

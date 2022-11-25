@@ -3,26 +3,32 @@
   ansible.builtin.unarchive:
     dest: "/usr/src/rtl88x2bu-{{ package_version }}"
     mode: 0755
-    remote_src: True
+    remote_src: true
     src: "https://github.com/cilynx/rtl88x2bu/archive/refs/heads/{{ package_version }}_35809.20191129_COEX20191120-7777.zip"
-  become: True
+  listen: install_driver
+  become: true
 
-- name: dkms add driver
+- name: Add rtl88x2bu driver
   ansible.builtin.command:
     cmd: "dkms add -m rtl88x2bu -v {{ package_version }}"
-  become: True
+  listen: install_driver
+  register: install_driver
+  become: true
 
-- name: dkms build driver
+- name: Build rtl88x2bu driver
   ansible.builtin.command:
     cmd: "dkms build -m rtl88x2bu -v {{ package_version }}"
-  become: True
+  listen: install_driver
+  become: true
 
-- name: dkms install driver
+- name: Install rtl88x2bu driver
   ansible.builtin.command:
     cmd: "dkms install -m rtl88x2bu -v {{ package_version }}"
-  become: True
+  listen: install_driver
+  become: true
 
-- name: modprobe rtl88x2bu driver
+- name: Modprobe rtl88x2bu driver
   ansible.builtin.modprobe:
     name: 88x2bu
-  become: True
+  listen: install_driver
+  become: true

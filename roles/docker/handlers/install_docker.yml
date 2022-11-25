@@ -1,0 +1,30 @@
+---
+- name: Install Docker Engine
+  ansible.builtin.apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+  listen: docker_stopped
+  become: true
+
+- name: Add Docker Group (Ubuntu)
+  ansible.builtin.group:
+    name: docker
+    state: present
+  listen: docker_stopped
+  become: true
+
+- name: Checking USER (Ubuntu)
+  ansible.builtin.assert:
+    that:
+      - lookup('ansible.builtin.env', 'USER') | length > 0
+    fail_msg: 'USER environment variable was not set. This is needed so the play knows who to add to the docker group.'
+
+- name: Adding USER to Docker Group (Ubuntu)
+  ansible.builtin.user:
+    groups: docker
+    append: true
+    name: "{{ lookup('ansible.builtin.env', 'USER') }}"
+  listen: docker_stopped
+  become: true

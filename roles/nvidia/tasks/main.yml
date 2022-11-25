@@ -1,0 +1,46 @@
+---
+- name: Checking ffmpeg
+  ansible.builtin.shell:
+    cmd: |
+      expected_flags=(
+        --enable-cuda
+        --enable-cuvid
+        --enable-nvdec
+        --enable-nvenc
+        --enable-nonfree
+        --enable-libnpp
+        --extra-cflags=-I/usr/local/cuda/include
+        --extra-ldflags=-L/usr/local/cuda/lib64
+      )
+
+      actual_flags=($(ffmpeg 2>&1 | grep 'configuration: ' | cut -d':' -f2))
+      missing_flags=()
+      for ef in {{ '"${expected_flags[@]}"' }}; do
+        found=false
+        for af in {{ '"${actual_flags[@]}"' }}; do
+          if [[ "${ef}" == "${af}" ]]; then
+            found=true
+            break
+          fi
+        done
+
+        if [[ {{ '"${found}"' }} == false ]]; then
+          missing_flags+=("${ef}")
+        fi
+      done
+
+      if [[ {{ '"${#missing_flags[@]}"' }} == 0 ]]; then
+        exit
+      fi
+
+      for mf in {{ '"${missing_flags[@]}"' }}; do
+        >&2 echo {{ '"missing flag ${mf}"' }}
+      done
+
+      exit 1
+    executable: bash
+  changed_when: "ffmpeg_check.rc != 0"
+  notify: ffmpeg_check
+  register: ffmpeg_check
+  tags:
+    - nvidia

@@ -1,0 +1,6 @@
+---
+- name: Install ffmpeg
+  ansible.builtin.import_tasks: install_ffmpeg.yml
+  listen: ffmpeg_check
+  tags:
+    - nvidia

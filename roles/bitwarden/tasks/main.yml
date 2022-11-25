@@ -2,13 +2,13 @@
 - name: Ensure unzip is installed
   ansible.builtin.apt:
     name: unzip
-    update_cache: True
-  become: True
+    update_cache: true
+  become: true
 
 - name: Download and install bw
   ansible.builtin.unarchive:
     dest: /usr/local/bin
     mode: 0755
-    remote_src: True
+    remote_src: true
     src: "https://vault.bitwarden.com/download/?app=cli&platform=linux"
-  become: True
+  become: true

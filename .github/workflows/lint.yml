@@ -1,0 +1,19 @@
+on:
+  pull_request:
+    types:
+    - opened
+    - edited
+    - reopened
+    - synchronize
+    - ready_for_review
+    branches:
+    - master
+
+jobs:
+  ansible-lint:
+    name: Ansbile Lint
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run ansible-lint
+      uses: ansible-community/ansible-lint-action@main
