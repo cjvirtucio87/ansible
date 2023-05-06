@@ -10,16 +10,3 @@
     clconf_version: 3.0.3
   tags:
     - cjvdev_wsl
-
-- name: Install gh
-  ansible.builtin.include_tasks:
-    file: roles/cjvdev/tasks/install_gh.yml
-    apply:
-      tags:
-        - cjvdev_wsl
-        - gh
-  vars:
-    gh_dir: /usr/local/lib/gh
-    gh_version: 2.9.0
-  tags:
-    - cjvdev_wsl
