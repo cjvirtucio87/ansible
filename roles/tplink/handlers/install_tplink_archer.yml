@@ -2,7 +2,7 @@
 - name: Download rtl88x2bu source
   ansible.builtin.unarchive:
     dest: "/usr/src/rtl88x2bu-{{ package_version }}"
-    mode: 0755
+    mode: "0755"
     remote_src: true
     src: "https://github.com/cilynx/rtl88x2bu/archive/refs/heads/{{ package_version }}_35809.20191129_COEX20191120-7777.zip"
   listen: install_driver
