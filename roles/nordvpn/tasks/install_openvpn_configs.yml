@@ -1,7 +1,7 @@
 ---
 - name: Create config dir
   ansible.builtin.file:
-    mode: 0755
+    mode: "0755"
     path: "{{ ovpn_config_dir }}"
     state: directory
   become: true
@@ -9,14 +9,14 @@
 - name: Install OpenVPN configs
   ansible.builtin.unarchive:
     dest: "{{ ovpn_config_dir }}"
-    mode: 0755
+    mode: "0755"
     remote_src: true
     src: 'https://downloads.nordcdn.com/configs/archives/servers/ovpn.zip'
   become: true
 
 - name: Create symlink
   ansible.builtin.file:
-    mode: 0755
+    mode: "0755"
     path: "/etc/openvpn/{{ ovpn_transport_protocol_dir | basename }}"
     src: "{{ ovpn_transport_protocol_dir }}"
     state: link

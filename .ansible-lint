@@ -1,6 +1,10 @@
 ---
+# ignoring nvidia and tplink for now
 exclude_paths:
-- requirements.yml
+  - requirements.yml
+  - .github
+  - roles/nvidia
+  - roles/tplink
 skip_list:
-# we do not generate roles with ansible-galaxy
-- meta-no-info
+  # we do not generate roles with ansible-galaxy
+  - meta-no-info

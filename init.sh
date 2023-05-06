@@ -21,21 +21,6 @@ set -e
 ###
 ###   Add verbosity and extra-vars:
 ###     ANSIBLE_FLAGS='-vvvvvv --extra-vars "foo=bar"' ./init.sh
-###
-### Remarks:
-###   The codebase was originally written with Ubuntu 20.04 in mind. Some
-###   changes were necessary to support Ubuntu 20.04 on WSL2. Notably,
-###   genie had to be integrated. genie is an app that initializes
-###   a separate kernel namespace for systemd, giving it a place
-###   to own PID 1. This allows systemd to function as normal, particularly
-###   for use with docker.
-###
-###   See the following articles for more information:
-###
-###   * https://askubuntu.com/a/1379567
-###   * https://www.nginx.com/blog/what-are-namespaces-cgroups-how-do-they-work/
-###   * https://man7.org/linux/man-pages/man2/unshare.2.html
-###   * https://github.com/arkane-systems/genie
 
 ROOT_DIR="$(dirname "$(readlink --canonicalize "$0")")"
 readonly ROOT_DIR
@@ -86,20 +71,6 @@ function _galaxy_install {
   deactivate
 }
 
-function _systemd_setup {
-  _transdebian_repo
-  sudo apt-get install systemd-genie
-  # most are based on: https://github.com/arkane-systems/genie/wiki/Systemd-units-known-to-be-problematic-under-WSL
-  sudo ssh-keygen -A
-  if grep 'LABEL=cloudimg-rootfs' /etc/fstab; then
-    >&2 echo "deleting fstab_label"
-    sudo dd of=/etc/fstab.bak if=/etc/fstab
-    sudo sed -i "/LABEL=cloudimg-rootfs/d" /etc/fstab
-  fi
-
-  genie --command bash -c "systemctl --failed | grep -E '^●' | awk '{print \$2}' | xargs sudo systemctl start"
-}
-
 function _transdebian_repo {
   local repo_cfg
   read -r -d '' repo_cfg <<EOF || :
@@ -147,20 +118,6 @@ function _play {
     ./init.yml
   )
 
-  if _contains cjvdev_wsl "${ROLES[@]}"; then
-    _systemd_setup
-    >&2 echo "play cmd: ${cmd[*]}"
-    genie --command bash -c "$(cat <<EOF
-. "${ANSIBLE_VENV_DIR}/bin/activate"
-python -m pip install psutil
-command -v ansible-playbook
-cd "${ROOT_DIR}"
-${cmd[*]}
-EOF
-)"
-    return
-  fi
-
   # shellcheck disable=SC1090
   . "${ANSIBLE_VENV_DIR}/bin/activate"
   command -v ansible-playbook
@@ -188,7 +145,21 @@ function _python {
   fi
 }
 
+function _help {
+  local line
+  while read -r line; do
+    if [[ "${line}" =~ ^### ]]; then
+      echo "${line}"
+    fi
+  done < "$(readlink -f "$0")" | less
+}
+
 function main {
+  if [[ "$1" == help ]]; then
+    _help
+    return
+  fi
+
   local chosen_stages
   IFS=' ' read -ra chosen_stages <<<"${STAGES}"
 
@@ -221,7 +192,7 @@ function main {
     fi
   done
 
-  >&2 echo 'All set! If this script was run for a WSL role, remember to run genie --shell to enter the kernel namespace mounted for systemd.'
+  >&2 echo 'All set!'
 }
 
-main
+main "$@"

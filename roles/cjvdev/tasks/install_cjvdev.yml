@@ -2,7 +2,7 @@
 - name: Create profile script
   ansible.builtin.template:
     dest: /etc/profile.d/00-cjvdev.sh
-    mode: 0755
+    mode: "0755"
     src: roles/cjvdev/templates/00-cjvdev.sh.j2
   become: true
   tags:
@@ -21,7 +21,7 @@
   ansible.builtin.get_url:
     checksum: "{{ clconf_checksum }}"
     dest: /usr/local/bin/clconf
-    mode: 0755
+    mode: "0755"
     url: "https://github.com/pastdev/clconf/releases/download/v{{ clconf_version }}/clconf-linux"
   become: true
   tags:

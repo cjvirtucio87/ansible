@@ -14,6 +14,6 @@
 - name: Create nordvpn.sh script
   ansible.builtin.template:
     dest: /usr/local/bin/nordvpn.sh
-    mode: 0755
+    mode: "0755"
     src: templates/nordvpn.sh.j2
   become: true
