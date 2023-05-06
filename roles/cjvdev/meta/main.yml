@@ -1,7 +1,5 @@
 ---
 dependencies:
   - role: docker
-  - role: bitwarden
-  - role: shellcheck
   - role: nvidia
   - role: tplink
