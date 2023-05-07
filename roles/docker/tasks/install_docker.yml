@@ -33,3 +33,9 @@
   become: true
   notify: docker_stopped
   when: service_status.stat.exists
+
+- name: Notify docker_stopped when Docker service does not exist
+  ansible.builtin.command:
+    cmd: echo
+  notify: docker_stopped
+  when: not service_status.stat.exists
